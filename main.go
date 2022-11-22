@@ -1,1 +1,1 @@
-package alitool
+package main
