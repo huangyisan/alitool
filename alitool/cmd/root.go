@@ -4,10 +4,11 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"alitool/alitool/cmd/alidomain"
 	"fmt"
 	"os"
 
+	"alitool/alitool/cmd/check"
+	"alitool/alitool/cmd/list"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -42,7 +43,8 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	// add sub command
-	rootCmd.AddCommand(alidomain.DomainCmd)
+	rootCmd.AddCommand(check.CheckCmd)
+	rootCmd.AddCommand(list.ListCmd)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,

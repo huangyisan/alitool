@@ -1,28 +1,30 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 */
-package alidomain
+package domain
 
 import (
+	"alitool/internal/domain"
 	"github.com/spf13/cobra"
 )
+
+func getDomainResource() func(cmd *cobra.Command, args []string) {
+	return func(cmd *cobra.Command, args []string) {
+		domain.DoGetDomainResource()
+	}
+}
 
 // domainCmd represents the domain command
 var DomainCmd = &cobra.Command{
 	Use:   "domain",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Help()
-	},
+	Short: "list all domains",
+	Example: `  # List all domains
+  alitool list domain`,
+	Run: getDomainResource(),
 }
 
 func init() {
+	//cmd.rootCmd.AddCommand(domainCmd)
 
 	// Here you will define your flags and configuration settings.
 

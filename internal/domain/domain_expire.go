@@ -1,15 +1,16 @@
 package domain
 
-import "fmt"
+import (
+	"fmt"
+)
 
-type day int
-
-func (dc *DomainClient) GetDomainExpireCurrDiff(domainName string) {
-	days := dc.queryDomainByDomainNameInfo(domainName).ExpirationCurrDateDiff
-	fmt.Printf("Domain: %s will expire in %d days\n", domainName, days)
+func (dc *DomainClient) getDomainExpireCurrDiff(domainName string) {
+	dm := domainSuffix(domainName)
+	days := dc.queryDomainByDomainNameInfo(dm).ExpirationCurrDateDiff
+	fmt.Printf("Domain: %s will expire in %d days\n", dm, days)
 }
 
-func (dc *DomainClient) GetExpireDomains(remainDays day) {
+func (dc *DomainClient) getExpireDomains(remainDays int) {
 	domainMap := make(map[string]int)
 	for _, dms := range dc.getAllDomains() {
 		for _, dm := range dms.Data.Domain {
@@ -23,5 +24,14 @@ func (dc *DomainClient) GetExpireDomains(remainDays day) {
 			fmt.Printf("Domain: %s will expire in %d days\n", k, v)
 		}
 	}
+}
 
+func DoGetExpireDomains(day int) {
+	dc := initDomainClient()
+	dc.getExpireDomains(day)
+}
+
+func DoGetDomainExpireCurrDiff(domainName string) {
+	dc := initDomainClient()
+	dc.getDomainExpireCurrDiff(domainName)
 }

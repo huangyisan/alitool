@@ -4,6 +4,8 @@ import (
 	"alitool/internal/pkg/strategy"
 	"fmt"
 	dm "github.com/aliyun/alibaba-cloud-sdk-go/services/domain"
+	"github.com/spf13/viper"
+	"strings"
 )
 
 type DomainClient struct {
@@ -26,4 +28,17 @@ func NewDomainClient(regionId, accessKeyId, accessKeySecret string) *DomainClien
 	return &DomainClient{
 		dc,
 	}
+}
+
+func initDomainClient() *DomainClient {
+	regionId := viper.GetString("regionId")
+	accessKeyId := viper.GetString("accessKeyId")
+	accessKeySecret := viper.GetString("accessKeySecret")
+	dc := NewDomainClient(regionId, accessKeyId, accessKeySecret)
+	return dc
+}
+
+func domainSuffix(domainName string) string {
+	dn := strings.Split(domainName, ".")
+	return strings.Join(dn[len(dn)-2:], ".")
 }
