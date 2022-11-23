@@ -4,7 +4,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package domain
 
 import (
-	"alitool/internal/domain"
+	"alitool/internal/ali/domain"
 	"github.com/spf13/cobra"
 )
 

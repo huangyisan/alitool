@@ -4,7 +4,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package domain
 
 import (
-	"alitool/internal/domain"
+	"alitool/internal/ali/domain"
 	"github.com/spf13/cobra"
 )
 
@@ -33,10 +33,10 @@ var DomainCmd = &cobra.Command{
 	Use:   "domain",
 	Short: "check domain expire day",
 	Example: `  # check all domains expire day
-  alitool check domain -A
+  alitool check domain -A -e 100
 
   # check specific domain within end expire day
-  alitool check domain -d baidu.com -e 100
+  alitool check domain -d baidu.com 
 `,
 	Run: domainExpireCheck(),
 }
@@ -45,6 +45,7 @@ func init() {
 	DomainCmd.Flags().StringVarP(&domainName, "domain", "d", "", "specific domain to check")
 	DomainCmd.Flags().IntVarP(&expireDay, "end-expire-day", "e", 100, "specific end expire day")
 	DomainCmd.Flags().BoolVarP(&checkAllDomain, "all-domains", "A", false, "check all domains")
+	DomainCmd.MarkFlagsMutuallyExclusive("all-domains", "domain")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
