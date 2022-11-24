@@ -1,0 +1,9 @@
+ali_account:
+  -
+      alias: ali_account_01
+      accessKeyId: abc
+      secretKeyId: def
+  -
+      alias: ali_account_02
+      accessKeyId: abc
+      secretKeyId: def

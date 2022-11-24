@@ -4,6 +4,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package list
 
 import (
+	"alitool/alitool/cmd/list/account"
 	"alitool/alitool/cmd/list/domain"
 	"github.com/spf13/cobra"
 )
@@ -20,6 +21,7 @@ var ListCmd = &cobra.Command{
 
 func init() {
 	ListCmd.AddCommand(domain.DomainCmd)
+	ListCmd.AddCommand(account.AccountCmd)
 
 	// Here you will define your flags and configuration settings.
 

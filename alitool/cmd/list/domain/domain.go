@@ -16,8 +16,9 @@ func getDomainResource() func(cmd *cobra.Command, args []string) {
 
 // domainCmd represents the domain command
 var DomainCmd = &cobra.Command{
-	Use:   "domain",
-	Short: "list all domains",
+	Use:                   "domain",
+	Short:                 "list all domains",
+	DisableFlagsInUseLine: true,
 	Example: `  # List all domains
   alitool list domain`,
 	Run: getDomainResource(),
