@@ -1,6 +1,7 @@
 package account
 
 import (
+	"fmt"
 	"github.com/spf13/viper"
 )
 
@@ -42,6 +43,20 @@ func accountToMap() {
 
 func getAccountMap() map[string]map[string]string {
 	return accountMap
+}
+
+func GetAccount(accountName string) (*aliAccount, bool) {
+	v, ok := accountMap[accountName]
+	if ok {
+		return &aliAccount{
+			Alias:           accountName,
+			AccessKeyId:     v["AccessKeyId"],
+			AccessKeySecret: v["AccessKeySecret"],
+		}, true
+	}
+	fmt.Printf("cannot find %q account\n", accountName)
+	DoListAccount()
+	return nil, false
 }
 
 func InitAccount() {
