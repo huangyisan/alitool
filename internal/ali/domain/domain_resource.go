@@ -2,6 +2,7 @@ package domain
 
 import "fmt"
 
+// getDomainResource print all the domains register in ali account
 func (dc *DomainClient) getDomainResource() {
 
 	domainSlice := make([]string, 0)
@@ -25,6 +26,7 @@ func (dc *DomainClient) getDomainResource() {
 	fmt.Printf("Domains count %d:\n", ldc)
 }
 
+// DoGetDomainResource execute domainResource function
 func DoGetDomainResource() {
 	dc := initDomainClient()
 	dc.getDomainResource()

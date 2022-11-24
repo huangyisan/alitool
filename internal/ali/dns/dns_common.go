@@ -5,37 +5,32 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 )
 
-func (d *DnsClient) DescribeDomainRecordsViaA(domainName string, subDomain chan string) error {
+// _common.go file will return origin resource information
+
+// DescribeDomainRecordsViaA print domain all A records
+func (d *DnsClient) DescribeDomainRecordsViaA(domainName string) []alidns.Record {
 	request := makeRequest("A", domainName)
 	response, err := d.ac.DescribeDomainRecords(request)
 	if err != nil {
-		return err
+		return nil
 	}
-	record := response.DomainRecords.Record
-	for _, v := range record {
-		if v.RR != "@" {
-			subDomain <- fmt.Sprintf("%s.%s", v.RR, v.DomainName)
-		}
-	}
-	return nil
+	return response.DomainRecords.Record
+
 }
 
-func (d *DnsClient) DescribeDomainRecordsViaCNAME(domainName string, subDomain chan string) error {
+// DescribeDomainRecordsViaCNAME print domain all CNAME records
+func (d *DnsClient) DescribeDomainRecordsViaCNAME(domainName string) []alidns.Record {
 	request := makeRequest("CNAME", domainName)
 	response, err := d.ac.DescribeDomainRecords(request)
 	if err != nil {
-		return err
+		return nil
 	}
-	record := response.DomainRecords.Record
-	for _, v := range record {
-		if v.RR != "@" {
-			subDomain <- fmt.Sprintf("%s.%s", v.RR, v.DomainName)
-		}
-	}
-	return nil
+	return response.DomainRecords.Record
 }
 
-func (d *DnsClient) DescribeDomains() (hasRecordDomains []string) {
+// ListDomains return all domains in ali account
+func (d *DnsClient) ListDomains() (hasRecordDomains map[string]struct{}) {
+	hasRecordDomains = make(map[string]struct{})
 	request := alidns.CreateDescribeDomainsRequest()
 	request.Scheme = "https"
 	request.PageSize = "100"
@@ -47,12 +42,13 @@ func (d *DnsClient) DescribeDomains() (hasRecordDomains []string) {
 	// 遍历结果
 	for _, v := range response.Domains.Domain {
 		if v.RecordCount != 0 {
-			hasRecordDomains = append(hasRecordDomains, v.DomainName)
+			hasRecordDomains[v.DomainName] = struct{}{}
 		}
 	}
-	return
+	return hasRecordDomains
 }
 
+// makeRequest encapsulate request
 func makeRequest(dnsType, domainName string) (request *alidns.DescribeDomainRecordsRequest) {
 	request = alidns.CreateDescribeDomainRecordsRequest()
 	request.Scheme = "https"

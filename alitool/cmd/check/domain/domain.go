@@ -14,6 +14,7 @@ var (
 	expireDay      int
 )
 
+// domainExpireCheck combine two function to check domain expire
 func domainExpireCheck() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
 		if checkAllDomain {
@@ -45,6 +46,8 @@ func init() {
 	DomainCmd.Flags().StringVarP(&domainName, "domain", "d", "", "specific domain to check")
 	DomainCmd.Flags().IntVarP(&expireDay, "end-expire-day", "e", 100, "specific end expire day")
 	DomainCmd.Flags().BoolVarP(&checkAllDomain, "all-domains", "A", false, "check all domains")
+
+	// only one command execute at one time
 	DomainCmd.MarkFlagsMutuallyExclusive("all-domains", "domain")
 	// Here you will define your flags and configuration settings.
 

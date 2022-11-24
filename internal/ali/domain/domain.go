@@ -13,6 +13,7 @@ type DomainClient struct {
 	dc *dm.Client
 }
 
+// NewDomainClient will return a domain client
 func NewDomainClient(regionId, accessKeyId, accessKeySecret string) *DomainClient {
 	op := strategy.Operator{}
 	op.SetServiceClient(&strategy.DomainClient{})
@@ -30,6 +31,7 @@ func NewDomainClient(regionId, accessKeyId, accessKeySecret string) *DomainClien
 	}
 }
 
+// initDomainClient to init domain client
 func initDomainClient() *DomainClient {
 	regionId := viper.GetString("regionId")
 	accessKeyId := viper.GetString("accessKeyId")
@@ -38,6 +40,7 @@ func initDomainClient() *DomainClient {
 	return dc
 }
 
+// domainSuffix will return domain suffix, such as www.baidu.com will return baidu.com
 func domainSuffix(domainName string) string {
 	dn := strings.Split(domainName, ".")
 	return strings.Join(dn[len(dn)-2:], ".")

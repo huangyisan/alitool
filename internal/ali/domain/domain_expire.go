@@ -4,12 +4,14 @@ import (
 	"fmt"
 )
 
+// getDomainExpireCurrDiff will print the specific domain will remain someday to expire
 func (dc *DomainClient) getDomainExpireCurrDiff(domainName string) {
 	dm := domainSuffix(domainName)
 	days := dc.queryDomainByDomainNameInfo(dm).ExpirationCurrDateDiff
 	fmt.Printf("Domain: %s will expire in %d days\n", dm, days)
 }
 
+// getExpireDomains will print all the domain expire day in ali account
 func (dc *DomainClient) getExpireDomains(remainDays int) {
 	domainMap := make(map[string]int)
 	for _, dms := range dc.getAllDomains() {
@@ -26,11 +28,13 @@ func (dc *DomainClient) getExpireDomains(remainDays int) {
 	}
 }
 
+// DoGetExpireDomains execute expireDomains function
 func DoGetExpireDomains(day int) {
 	dc := initDomainClient()
 	dc.getExpireDomains(day)
 }
 
+// DoGetDomainExpireCurrDiff execute domainExpireCurrDiff function
 func DoGetDomainExpireCurrDiff(domainName string) {
 	dc := initDomainClient()
 	dc.getDomainExpireCurrDiff(domainName)

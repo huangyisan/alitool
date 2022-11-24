@@ -13,5 +13,4 @@ func TestDomainClient_checkDomainStatus(t *testing.T) {
 func Test_spilit(t *testing.T) {
 	word := "baidu.com"
 	fmt.Println(domainSuffix(word))
-
 }

@@ -6,6 +6,9 @@ import (
 	dm "github.com/aliyun/alibaba-cloud-sdk-go/services/domain"
 )
 
+// _common.go file will return origin resource information
+
+// queryDomainByDomainNameInfo will return domain all information
 func (dc *DomainClient) queryDomainByDomainNameInfo(domainName string) *dm.QueryDomainByDomainNameResponse {
 	request := dm.CreateQueryDomainByDomainNameRequest()
 	request.Scheme = "https"
@@ -17,6 +20,7 @@ func (dc *DomainClient) queryDomainByDomainNameInfo(domainName string) *dm.Query
 	return response
 }
 
+// getAllDomains will return all domains in ali account
 func (dc *DomainClient) getAllDomains() (responses []*dm.QueryDomainListResponse) {
 	var pageStartNumber = 1
 	nextFlag := true
