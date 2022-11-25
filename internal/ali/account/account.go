@@ -50,10 +50,11 @@ func GetAccount(accountName string) (*aliAccount, bool) {
 	if ok {
 		return &aliAccount{
 			Alias:           accountName,
-			AccessKeyId:     v["AccessKeyId"],
-			AccessKeySecret: v["AccessKeySecret"],
+			AccessKeyId:     v["accessKeyId"],
+			AccessKeySecret: v["accessKeySecret"],
 		}, true
 	}
+
 	fmt.Printf("cannot find %q account\n", accountName)
 	DoListAccount()
 	return nil, false
