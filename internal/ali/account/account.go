@@ -9,7 +9,7 @@ import (
 // alias:{ak:xxx, sk:xxx}
 var accountMap map[string]map[string]string
 
-// var accounts []aliAccount
+// var accounts []AliAccount
 var accounts Accounts
 
 type Accounts struct {
@@ -20,6 +20,14 @@ type aliAccount struct {
 	Alias           string `mapstructure:"alias"`
 	AccessKeyId     string `mapstructure:"accessKeyId"`
 	AccessKeySecret string `mapstructure:"secretKeyId"`
+}
+
+func (a *aliAccount) GetAccessKeyId() string {
+	return a.AccessKeyId
+}
+
+func (a *aliAccount) GetAccessKeySecret() string {
+	return a.AccessKeySecret
 }
 
 //func GetAllAliAccounts() Accounts {

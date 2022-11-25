@@ -1,15 +1,34 @@
 package dns
 
 import (
+	"alitool/internal/ali/account"
 	"alitool/internal/pkg/strategy"
-	"alitool/internal/pkg/test"
 	"fmt"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
-	"github.com/spf13/viper"
 )
 
 type DnsClient struct {
 	ac *alidns.Client
+}
+
+type options struct {
+	regionId string
+}
+
+type Option interface {
+	apply(*options)
+}
+
+type optionFunc func(*options)
+
+func (f optionFunc) apply(o *options) {
+	f(o)
+}
+
+func WithRegionId(regionId string) Option {
+	return optionFunc(func(o *options) {
+		o.regionId = regionId
+	})
 }
 
 // NewDnsClient return DnsClient
@@ -31,11 +50,11 @@ func NewDnsClient(regionId, accessKeyId, accessKeySecret string) *DnsClient {
 }
 
 // initDnsClient will execute NewDnsClient to make a new DnsClient
-func initDnsClient() *DnsClient {
-	test.GetEnv()
-	regionId := viper.GetString("regionId")
-	accessKeyId := viper.GetString("accessKeyId")
-	accessKeySecret := viper.GetString("accessKeySecret")
-	dc := NewDnsClient(regionId, accessKeyId, accessKeySecret)
+func initDnsClient(accountName, regionId string) *DnsClient {
+	a, ok := account.GetAccount(accountName)
+	if !ok {
+		return nil
+	}
+	dc := NewDnsClient(regionId, a.GetAccessKeyId(), a.GetAccessKeySecret())
 	return dc
 }

@@ -28,7 +28,7 @@ func (d *DnsClient) isDNSExist(domainName string) {
 	fmt.Printf("not exist domain: %s", domainName)
 }
 
-func DoIsDNSExist(domainName string) {
-	dc := initDnsClient()
+func DoIsDNSExist(accountName, domainName, regionId string) {
+	dc := initDnsClient(accountName, regionId)
 	dc.isDNSExist(domainName)
 }
