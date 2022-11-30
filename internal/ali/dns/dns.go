@@ -56,23 +56,18 @@ func NewDnsClient(regionId, accessKeyId, accessKeySecret string) *DnsClient {
 func initDnsClient(accountName, regionId string) *DnsClient {
 	a, ok := account.GetAccount(accountName)
 	if !ok {
-		fmt.Println("tmp nooooo")
 		return nil
 	}
 	dc := NewDnsClient(regionId, a.GetAccessKeyId(), a.GetAccessKeySecret())
-	fmt.Printf("tmp dc: %#v", dc)
 	return dc
 }
 
 // initAllDnsClient will init all DnsClient from .alitool.yaml
 func initAllDnsClient() {
 	accounts := account.GetAccountMap()
-	fmt.Printf("tmp: %#v\n", accounts)
 	for k, _ := range accounts {
-		fmt.Println("tmp:", k)
 		initDnsClient(k, common.DefaultRegionId)
 		dnsClients[k] = initDnsClient(k, common.DefaultRegionId)
-		//dnsClients = append(dnsClients, initDnsClient(k, regionId))
 	}
 }
 
