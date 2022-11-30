@@ -10,6 +10,7 @@ import (
 func setup() {
 	test.GetEnv()
 	account.InitAccount()
+	initAllDnsClient()
 }
 
 func Test_initDnsClient(t *testing.T) {
@@ -100,4 +101,9 @@ func TestNewDnsClient(t *testing.T) {
 			}
 		})
 	}
+}
+
+func Test_initAllDnsClient(t *testing.T) {
+	setup()
+	initAllDnsClient()
 }

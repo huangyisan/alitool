@@ -22,6 +22,10 @@ type aliAccount struct {
 	AccessKeySecret string `mapstructure:"secretKeyId"`
 }
 
+func GetAccountMap() map[string]map[string]string {
+	return accountMap
+}
+
 func (a *aliAccount) GetAccessKeyId() string {
 	return a.AccessKeyId
 }

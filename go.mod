@@ -6,6 +6,7 @@ require github.com/aliyun/alibaba-cloud-sdk-go v1.61.1683
 
 require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
+	github.com/golang/mock v1.6.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect

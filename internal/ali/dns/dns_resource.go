@@ -20,7 +20,7 @@ func (d *DnsClient) getDNSRecords(domainName string) {
 
 // IsDomainDNSExist judge domain dns record in ali account
 func (d *DnsClient) isDNSExist(domainName string) {
-	_, ok := d.ListDomains()[domainName]
+	_, ok := d.GetAllDomains()[domainName]
 	if ok {
 		fmt.Printf("exist domain: %s", domainName)
 		return
