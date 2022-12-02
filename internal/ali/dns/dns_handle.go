@@ -6,31 +6,10 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 )
 
-type RecordDomains map[string]struct{}
+type recordDnsDomains map[string]struct{}
 
-// DescribeDomainRecordsViaA print domain all A records
-func (d *DnsClient) DescribeDomainRecordsViaA(domainName string) []alidns.Record {
-	request := makeRequest("A", domainName)
-	response, err := d.ac.DescribeDomainRecords(request)
-	if err != nil {
-		return nil
-	}
-	return response.DomainRecords.Record
-
-}
-
-// DescribeDomainRecordsViaCNAME print domain all CNAME records
-func (d *DnsClient) DescribeDomainRecordsViaCNAME(domainName string) []alidns.Record {
-	request := makeRequest("CNAME", domainName)
-	response, err := d.ac.DescribeDomainRecords(request)
-	if err != nil {
-		return nil
-	}
-	return response.DomainRecords.Record
-}
-
-// GetAllDomains return all dns domains in ali account
-func (d *DnsClient) GetAllDomains() (hasRecordDomains RecordDomains) {
+// getAllDnsDomains will return all dns domains in ali account
+func (d *DnsClient) getAllDnsDomains() (hasRecordDomains recordDnsDomains) {
 	hasRecordDomains = make(map[string]struct{})
 
 	var pageStartNumber = 1
@@ -62,12 +41,11 @@ func (d *DnsClient) GetAllDomains() (hasRecordDomains RecordDomains) {
 	return hasRecordDomains
 }
 
-// makeRequest encapsulate request
-func makeRequest(dnsType, domainName string) (request *alidns.DescribeDomainRecordsRequest) {
-	request = alidns.CreateDescribeDomainRecordsRequest()
-	request.Scheme = "https"
-	request.Status = "Enable"
-	request.DomainName = domainName
-	request.Type = dnsType
-	return
+func (d *DnsClient) isDNSExist(domainName string) {
+	_, ok := d.getAllDnsDomains()[domainName]
+	if ok {
+		fmt.Printf("exist domain: %s", domainName)
+		return
+	}
+	fmt.Printf("not exist domain: %s", domainName)
 }

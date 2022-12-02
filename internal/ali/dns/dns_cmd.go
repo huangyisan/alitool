@@ -7,17 +7,13 @@ import (
 )
 
 // listDnsByAccount list dns by ali account
-func listDnsByAccount(accountName string) RecordDomains {
+func listDnsByAccount(accountName string) recordDnsDomains {
 	dnsClient := GetDnsClients()[accountName]
-	return dnsClient.GetAllDomains()
-	//if ok {
-	//
-	//}
-	//return nil
+	return dnsClient.getAllDnsDomains()
 
 }
 
-// isDnsInAccount judege dns in account
+// isDnsInAccount judge dns in account
 func isDnsInAccount(accountName, domainName string) bool {
 	_domainName := common.DomainSuffix(domainName)
 	_, ok := listDnsByAccount(accountName)[_domainName]

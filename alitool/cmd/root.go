@@ -6,6 +6,7 @@ package cmd
 import (
 	"alitool/internal/ali/account"
 	"alitool/internal/ali/dns"
+	"alitool/internal/ali/domain"
 	"fmt"
 	"os"
 
@@ -85,5 +86,8 @@ func initConfig() {
 
 	// init ali all accounts
 	account.InitAccount()
+	// init dns clients
 	dns.InitAllDnsClient()
+	// init domain clients
+	domain.InitAllDomainClient()
 }

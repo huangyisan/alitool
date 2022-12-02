@@ -10,6 +10,7 @@ import (
 
 var (
 	domainName     string
+	accountName    string
 	checkAllDomain bool
 	expireDay      int
 )
@@ -17,15 +18,16 @@ var (
 // domainExpireCheck combine two function to check domain expire
 func domainExpireCheck() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
-		if checkAllDomain {
-			domain.DoGetExpireDomains(expireDay)
-			return
-		} else if domainName != "" {
-			domain.DoGetDomainExpireCurrDiff(domainName)
-			return
-		} else {
-			cmd.Help()
-		}
+		domain.FindExpireDomainsByAccount(accountName, expireDay)
+		//if checkAllDomain {
+		//	domain.DoGetExpireDomains(expireDay)
+		//	return
+		//} else if domainName != "" {
+		//	domain.DoGetDomainExpireCurrDiff(domainName)
+		//	return
+		//} else {
+		//	cmd.Help()
+		//}
 	}
 }
 
@@ -43,12 +45,13 @@ var DomainCmd = &cobra.Command{
 }
 
 func init() {
+	DomainCmd.Flags().StringVarP(&accountName, "account", "a", "", "specific account to check")
 	DomainCmd.Flags().StringVarP(&domainName, "domain", "d", "", "specific domain to check")
 	DomainCmd.Flags().IntVarP(&expireDay, "end-expire-day", "e", 100, "specific end expire day")
 	DomainCmd.Flags().BoolVarP(&checkAllDomain, "all-domains", "A", false, "check all domains")
 
 	// only one command execute at one time
-	DomainCmd.MarkFlagsMutuallyExclusive("all-domains", "domain")
+	//DomainCmd.MarkFlagsMutuallyExclusive("all-domains", "domain")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

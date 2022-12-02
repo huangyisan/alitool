@@ -14,26 +14,6 @@ type DnsClient struct {
 
 var dnsClients = make(map[string]*DnsClient)
 
-type options struct {
-	regionId string
-}
-
-type Option interface {
-	apply(*options)
-}
-
-type optionFunc func(*options)
-
-func (f optionFunc) apply(o *options) {
-	f(o)
-}
-
-func WithRegionId(regionId string) Option {
-	return optionFunc(func(o *options) {
-		o.regionId = regionId
-	})
-}
-
 // NewDnsClient return DnsClient
 func NewDnsClient(regionId, accessKeyId, accessKeySecret string) *DnsClient {
 	op := strategy.Operator{}

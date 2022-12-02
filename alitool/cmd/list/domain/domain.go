@@ -8,9 +8,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func getDomainResource() func(cmd *cobra.Command, args []string) {
+var (
+	accountName string
+	domainName  string
+)
+
+func domainAction() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
-		domain.DoGetDomainResource()
+		domain.ListRegisteredDomainByAccount(accountName)
 	}
 }
 
@@ -21,11 +26,13 @@ var DomainCmd = &cobra.Command{
 	DisableFlagsInUseLine: true,
 	Example: `  # List all domains
   alitool list domain`,
-	Run: getDomainResource(),
+	Run: domainAction(),
 }
 
 func init() {
-	//cmd.rootCmd.AddCommand(domainCmd)
+
+	DomainCmd.Flags().StringVarP(&domainName, "domain", "i", "", "specific domain name")
+	DomainCmd.Flags().StringVarP(&accountName, "account", "a", "", "specific account name")
 
 	// Here you will define your flags and configuration settings.
 
