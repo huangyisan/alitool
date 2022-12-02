@@ -62,8 +62,8 @@ func initDnsClient(accountName, regionId string) *DnsClient {
 	return dc
 }
 
-// initAllDnsClient will init all DnsClient from .alitool.yaml
-func initAllDnsClient() {
+// InitAllDnsClient will init all DnsClient from .alitool.yaml
+func InitAllDnsClient() {
 	accounts := account.GetAccountMap()
 	for k, _ := range accounts {
 		initDnsClient(k, common.DefaultRegionId)

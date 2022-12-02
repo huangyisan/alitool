@@ -1,12 +1,13 @@
 package domain
 
 import (
+	"alitool/internal/pkg/common"
 	"fmt"
 )
 
 // getDomainExpireCurrDiff will print the specific domain will remain someday to expire
 func (dc *DomainClient) getDomainExpireCurrDiff(domainName string) {
-	dm := domainSuffix(domainName)
+	dm := common.DomainSuffix(domainName)
 	days := dc.queryDomainByDomainNameInfo(dm).ExpirationCurrDateDiff
 	fmt.Printf("Domain: %s will expire in %d days\n", dm, days)
 }

@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"alitool/internal/pkg/common"
 	"fmt"
 	"testing"
 )
@@ -12,5 +13,5 @@ func TestDomainClient_checkDomainStatus(t *testing.T) {
 
 func Test_spilit(t *testing.T) {
 	word := "baidu.com"
-	fmt.Println(domainSuffix(word))
+	fmt.Println(common.DomainSuffix(word))
 }

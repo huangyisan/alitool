@@ -1,7 +1,6 @@
 package account
 
 import (
-	"fmt"
 	"github.com/spf13/viper"
 )
 
@@ -67,8 +66,8 @@ func GetAccount(accountName string) (*aliAccount, bool) {
 		}, true
 	}
 
-	fmt.Printf("cannot find %q account\n", accountName)
-	DoListAccount()
+	//fmt.Printf("cannot find %q account\n", accountName)
+	//DoListAccount()
 	return nil, false
 }
 

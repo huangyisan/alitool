@@ -15,7 +15,7 @@
    * 列出指定账号下的所有dns
      * go run main.go list dns -a accountName
    * 给定域名,反查存在哪个账号
-     * go run main.go list dns -i baidu.com
+     * go run main.go list dns -i baidu.com -r
 3. 财务服务
     * 查询余额
       * 指定账号,查询余额
@@ -26,3 +26,5 @@
 ## 其他
 1. 列出当前配置的阿里云账号
    * go run main.go list account
+2. 列出region
+   * go run main.go list region

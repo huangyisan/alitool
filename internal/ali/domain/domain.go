@@ -5,7 +5,6 @@ import (
 	"fmt"
 	dm "github.com/aliyun/alibaba-cloud-sdk-go/services/domain"
 	"github.com/spf13/viper"
-	"strings"
 )
 
 type DomainClient struct {
@@ -40,8 +39,8 @@ func initDomainClient() *DomainClient {
 	return dc
 }
 
-// domainSuffix will return domain suffix, such as www.baidu.com will return baidu.com
-func domainSuffix(domainName string) string {
-	dn := strings.Split(domainName, ".")
-	return strings.Join(dn[len(dn)-2:], ".")
-}
+//// DomainSuffix will return domain suffix, such as www.baidu.com will return baidu.com
+//func DomainSuffix(domainName string) string {
+//	dn := strings.Split(domainName, ".")
+//	return strings.Join(dn[len(dn)-2:], ".")
+//}

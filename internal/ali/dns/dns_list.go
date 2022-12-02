@@ -1,12 +1,39 @@
 package dns
 
-import "fmt"
+import (
+	"alitool/internal/ali/account"
+	"alitool/internal/pkg/common"
+)
 
-func ListDnsByAccount(accountName string) {
+// listDnsByAccount list dns by ali account
+func listDnsByAccount(accountName string) RecordDomains {
 	dnsClient := GetDnsClients()[accountName]
-	hasRecordDomains := dnsClient.GetAllDomains()
-	fmt.Printf("%s has dns record:\n", accountName)
-	for record, _ := range hasRecordDomains {
-		fmt.Println(record)
+	return dnsClient.GetAllDomains()
+	//if ok {
+	//
+	//}
+	//return nil
+
+}
+
+// isDnsInAccount judege dns in account
+func isDnsInAccount(accountName, domainName string) bool {
+	_domainName := common.DomainSuffix(domainName)
+	_, ok := listDnsByAccount(accountName)[_domainName]
+	if ok {
+		return true
 	}
+	return false
+}
+
+// findDnsInAccount reverse dns which ali account
+func findDnsInAccount(domainName string) (accountName string) {
+	_domainName := common.DomainSuffix(domainName)
+	accountMap := account.GetAccountMap()
+	for _accountName, _ := range accountMap {
+		if _, ok := listDnsByAccount(_accountName)[_domainName]; ok {
+			return _accountName
+		}
+	}
+	return ""
 }

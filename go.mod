@@ -5,6 +5,7 @@ go 1.19
 require github.com/aliyun/alibaba-cloud-sdk-go v1.61.1683
 
 require (
+	github.com/dchest/validator v0.0.0-20191217151620-8e45250f2371 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect

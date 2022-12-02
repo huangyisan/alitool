@@ -5,6 +5,7 @@ package list
 
 import (
 	"alitool/alitool/cmd/list/account"
+	"alitool/alitool/cmd/list/dns"
 	"alitool/alitool/cmd/list/domain"
 	"github.com/spf13/cobra"
 )
@@ -22,6 +23,7 @@ var ListCmd = &cobra.Command{
 func init() {
 	ListCmd.AddCommand(domain.DomainCmd)
 	ListCmd.AddCommand(account.AccountCmd)
+	ListCmd.AddCommand(dns.DnsCmd)
 
 	// Here you will define your flags and configuration settings.
 

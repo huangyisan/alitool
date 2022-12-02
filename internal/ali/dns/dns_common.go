@@ -8,6 +8,8 @@ import (
 
 // _common.go file will return origin resource information
 
+type RecordDomains map[string]struct{}
+
 // DescribeDomainRecordsViaA print domain all A records
 func (d *DnsClient) DescribeDomainRecordsViaA(domainName string) []alidns.Record {
 	request := makeRequest("A", domainName)
@@ -30,7 +32,7 @@ func (d *DnsClient) DescribeDomainRecordsViaCNAME(domainName string) []alidns.Re
 }
 
 // GetAllDomains return all dns domains in ali account
-func (d *DnsClient) GetAllDomains() (hasRecordDomains map[string]struct{}) {
+func (d *DnsClient) GetAllDomains() (hasRecordDomains RecordDomains) {
 	hasRecordDomains = make(map[string]struct{})
 
 	var pageStartNumber = 1
