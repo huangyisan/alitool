@@ -10,7 +10,13 @@ import (
 
 func getAccountResource() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
-		account.DoListAccount()
+		account.ListAccount()
+	}
+}
+
+func listRegionResource() func(cmd *cobra.Command, args []string) {
+	return func(cmd *cobra.Command, args []string) {
+		account.ListRegion()
 	}
 }
 
@@ -22,6 +28,15 @@ var AccountCmd = &cobra.Command{
 	Example: `  # List all domains
     alitool list account`,
 	Run: getAccountResource(),
+}
+
+var RegionCmd = &cobra.Command{
+	Use:                   "region",
+	Short:                 "List all region",
+	DisableFlagsInUseLine: true,
+	Example: `  # List all region
+    alitool list region`,
+	Run: listRegionResource(),
 }
 
 func init() {

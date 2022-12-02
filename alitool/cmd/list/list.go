@@ -23,6 +23,7 @@ var ListCmd = &cobra.Command{
 func init() {
 	ListCmd.AddCommand(domain.DomainCmd)
 	ListCmd.AddCommand(account.AccountCmd)
+	ListCmd.AddCommand(account.RegionCmd)
 	ListCmd.AddCommand(dns.DnsCmd)
 
 	// Here you will define your flags and configuration settings.

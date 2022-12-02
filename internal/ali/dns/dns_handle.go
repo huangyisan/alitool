@@ -6,8 +6,6 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 )
 
-// _common.go file will return origin resource information
-
 type RecordDomains map[string]struct{}
 
 // DescribeDomainRecordsViaA print domain all A records
@@ -73,15 +71,3 @@ func makeRequest(dnsType, domainName string) (request *alidns.DescribeDomainReco
 	request.Type = dnsType
 	return
 }
-
-//func (ad accountDomain) GetSubDomainsByAccount(ac Account, subDomain chan string) error {
-//	var err error
-//	for _, v := range ad.domains {
-//		err = ac.DescribeDomainRecordsViaA(v, subDomain)
-//		err = ac.DescribeDomainRecordsViaCNAME(v, subDomain)
-//		if err != nil {
-//			return err
-//		}
-//	}
-//	return nil
-//}
