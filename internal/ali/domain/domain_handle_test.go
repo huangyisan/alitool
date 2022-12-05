@@ -27,3 +27,8 @@ func Test_findExpireDomainsInAllAccounts(t *testing.T) {
 
 	}
 }
+
+func Test_FindExpireDomainRefAccount(t *testing.T) {
+	setup()
+	FindExpireDomainRefAccount("xiaozhumao.com")
+}

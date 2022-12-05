@@ -11,11 +11,27 @@ import (
 var (
 	accountName string
 	domainName  string
+	reverse     bool
 )
 
 func domainAction() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
-		domain.ListRegisteredDomainByAccount(accountName)
+		if accountName != "" && domainName == "" && reverse == false {
+			domain.ListRegisteredDomainByAccount(accountName)
+			return
+		}
+
+		if accountName != "" && domainName != "" {
+			domain.IsDomainInAccount(accountName, domainName)
+			return
+		}
+
+		if domainName != "" && reverse == true {
+			domain.FindDomainsInAccount(domainName)
+			return
+		}
+		DomainCmd.Help()
+
 	}
 }
 
@@ -33,6 +49,7 @@ func init() {
 
 	DomainCmd.Flags().StringVarP(&domainName, "domain", "i", "", "specific domain name")
 	DomainCmd.Flags().StringVarP(&accountName, "account", "a", "", "specific account name")
+	DomainCmd.Flags().BoolVarP(&reverse, "reverse", "r", false, "reverse the domain in account")
 
 	// Here you will define your flags and configuration settings.
 

@@ -22,6 +22,15 @@ func isDomainInAccount(accountName, domainName string) bool {
 	return false
 }
 
+// isDomainInAccount print domain whether in account
+func IsDomainInAccount(accountName, domainName string) {
+	if isDomainInAccount(accountName, domainName) {
+		fmt.Printf("%s exist in %s", domainName, accountName)
+		return
+	}
+	fmt.Printf("%s not exist in %s", domainName, accountName)
+}
+
 // findDomainsInAccount reverse dns which ali account
 func findDomainsInAccount(domainName string) (accountName string) {
 	_domainName := common.DomainSuffix(domainName)
@@ -32,6 +41,14 @@ func findDomainsInAccount(domainName string) (accountName string) {
 		}
 	}
 	return ""
+}
+
+func FindDomainsInAccount(domainName string) {
+	if accountName := findDomainsInAccount(domainName); accountName != "" {
+		fmt.Printf("domainName: %s exist in %s", domainName, accountName)
+		return
+	}
+	fmt.Printf("domainName: %s not exist in any account", domainName)
 }
 
 // findExpireDomainsByAccount will return expire domain in specific day and account
@@ -52,6 +69,26 @@ func findExpireDomainsInAllAccounts(expireDay int) (expireDomainsInAllAccounts m
 		}
 	}
 	return expireDomainsInAllAccounts
+}
+
+// findExpireDomainRefAccount will return expire domain and account
+// e.g alitool check  domain -d baidu.com
+func findExpireDomainRefAccount(domainName string) (accountName string, expireDay int) {
+	if accountName := findDomainsInAccount(domainName); accountName != "" {
+		domainClient := GetDomainClients()[accountName]
+		return accountName, domainClient.getDomainExpireCurrDiff(domainName)
+	}
+	return "", 0
+}
+
+func FindExpireDomainRefAccount(domainName string) {
+	accountName, expireDay := findExpireDomainRefAccount(domainName)
+	if accountName != "" {
+		fmt.Printf("domain %s found in %s account, expire in %d days\n", domainName, accountName, expireDay)
+		return
+	}
+	fmt.Printf("no %s found in all account", domainName)
+
 }
 
 func ListRegisteredDomainByAccount(accountName string) {
@@ -83,15 +120,15 @@ func FindExpireDomainsByAccount(accountName string, expireDay int) {
 func FindExpireDomainsInAllAccounts(expireDay int) {
 	expireDomainsInAllAccounts := findExpireDomainsInAllAccounts(expireDay)
 	if len(expireDomainsInAllAccounts) > 0 {
-		for account, v := range expireDomainsInAllAccounts {
+		for _account, v := range expireDomainsInAllAccounts {
 			if len(v) > 0 {
-				fmt.Printf("account: %s", account)
+				fmt.Printf("account: %s", _account)
 				for domain, exDay := range v {
-					fmt.Printf("domain: %s, expireDay: %s", domain, exDay)
+					fmt.Printf("domain: %s, expireDay: %d", domain, exDay)
 				}
 			}
 		}
 		return
 	}
-	fmt.Printf("no expire domain in %s days", expireDay)
+	fmt.Printf("no expire domain in %d days", expireDay)
 }
