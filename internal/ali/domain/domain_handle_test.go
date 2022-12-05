@@ -15,3 +15,15 @@ func Test_spilit(t *testing.T) {
 	word := "baidu.com"
 	fmt.Println(common.DomainSuffix(word))
 }
+
+func Test_findExpireDomainsInAllAccounts(t *testing.T) {
+	setup()
+	a := findExpireDomainsInAllAccounts(300)
+	for account, v := range a {
+		fmt.Println(account)
+		for domain, expireday := range v {
+			fmt.Println(domain, expireday)
+		}
+
+	}
+}

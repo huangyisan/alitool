@@ -15,6 +15,25 @@ var (
 	expireDay      int
 )
 
+func domainAction() func(cmd *cobra.Command, args []string) {
+	return func(cmd *cobra.Command, args []string) {
+		if checkAllDomain {
+			domain.FindExpireDomainsInAllAccounts(expireDay)
+			return
+		}
+
+		if accountName != "" {
+			domain.FindExpireDomainsByAccount(accountName, expireDay)
+			return
+		}
+
+		if domainName != "" {
+			return
+		}
+	}
+
+}
+
 // domainExpireCheck combine two function to check domain expire
 func domainExpireCheck() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {

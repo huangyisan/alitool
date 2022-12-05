@@ -22,8 +22,8 @@ func isDomainInAccount(accountName, domainName string) bool {
 	return false
 }
 
-// findDomainInAccount reverse dns which ali account
-func findDomainInAccount(domainName string) (accountName string) {
+// findDomainsInAccount reverse dns which ali account
+func findDomainsInAccount(domainName string) (accountName string) {
 	_domainName := common.DomainSuffix(domainName)
 	accountMap := account.GetAccountMap()
 	for _accountName, _ := range accountMap {
@@ -41,6 +41,19 @@ func findExpireDomainsByAccount(accountName string, expireDay int) (expireDomain
 	return domainClient.getExpireDomains(expireDay)
 }
 
+// findExpireDomainsInAllAccounts will return expire domains in all accounts
+func findExpireDomainsInAllAccounts(expireDay int) (expireDomainsInAllAccounts map[string]map[string]int) {
+	expireDomainsInAllAccounts = make(map[string]map[string]int)
+	accountMap := account.GetAccountMap()
+	for _accountName, _ := range accountMap {
+		expireDomainsInOneAccount := findExpireDomainsByAccount(_accountName, expireDay)
+		if len(expireDomainsInOneAccount) > 0 {
+			expireDomainsInAllAccounts[_accountName] = expireDomainsInOneAccount
+		}
+	}
+	return expireDomainsInAllAccounts
+}
+
 func ListRegisteredDomainByAccount(accountName string) {
 	recordRegisterDomains := listRegisteredDomainByAccount(accountName)
 	if len(recordRegisterDomains) > 0 {
@@ -52,6 +65,8 @@ func ListRegisteredDomainByAccount(accountName string) {
 	fmt.Printf("Total count: %d\n", len(recordRegisterDomains))
 }
 
+// FindExpireDomainsByAccount will print expire domain in account
+// alitool check  domain -a accountName -e 100
 func FindExpireDomainsByAccount(accountName string, expireDay int) {
 	expireDomains := findExpireDomainsByAccount(accountName, expireDay)
 	if len(expireDomains) > 0 {
@@ -61,4 +76,22 @@ func FindExpireDomainsByAccount(accountName string, expireDay int) {
 		return
 	}
 	fmt.Printf("account %s no expire domain in %d days\n", accountName, expireDay)
+}
+
+// FindExpireDomainsInAllAccounts will print all expire domains in every account
+// alitool check  domain -A -e 100
+func FindExpireDomainsInAllAccounts(expireDay int) {
+	expireDomainsInAllAccounts := findExpireDomainsInAllAccounts(expireDay)
+	if len(expireDomainsInAllAccounts) > 0 {
+		for account, v := range expireDomainsInAllAccounts {
+			if len(v) > 0 {
+				fmt.Printf("account: %s", account)
+				for domain, exDay := range v {
+					fmt.Printf("domain: %s, expireDay: %s", domain, exDay)
+				}
+			}
+		}
+		return
+	}
+	fmt.Printf("no expire domain in %s days", expireDay)
 }
