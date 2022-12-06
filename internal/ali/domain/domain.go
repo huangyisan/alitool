@@ -28,27 +28,7 @@ type IDomainClient interface {
 	findExpireDomainsByAccount(IDomainClient, int) map[string]int
 }
 
-//var domainClients = make(map[string]*DomainClient)
-
 var domainClients = make([]IDomainClient, 0)
-
-//func newClient(accountName, regionId, accessKeyId, accessKeySecret string, IServiceClient strategy.IServiceClient) interface{} {
-//	op := strategy.Operator{}
-//	op.SetServiceClient(IServiceClient)
-//	c, err := op.NewClient(regionId, accessKeyId, accessKeySecret)
-//	if err != nil {
-//		return nil
-//	}
-//
-//	switch t := c.(type) {
-//	case *dm.Client:
-//		return &DomainClient{
-//			accountName,
-//			regionId,
-//			t,
-//		}
-//	}
-//}
 
 // newDomainClient will return a domain client
 func newDomainClient(accountName, regionId, accessKeyId, accessKeySecret string) IDomainClient {

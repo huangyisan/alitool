@@ -63,9 +63,9 @@ func (d *DomainClient) getAllRegisteredDomains() (hasRecordDomains recordRegiste
 func (d *DomainClient) getExpireDomains(expireDay int) (expireDomains map[string]int) {
 	expireDomains = make(map[string]int)
 	for _, dms := range d.getAllRegisteredDomainsResponse() {
-		for _, dm := range dms.Data.Domain {
-			if dm.ExpirationCurrDateDiff < expireDay {
-				expireDomains[dm.DomainName] = dm.ExpirationCurrDateDiff
+		for _, _dm := range dms.Data.Domain {
+			if _dm.ExpirationCurrDateDiff < expireDay {
+				expireDomains[_dm.DomainName] = _dm.ExpirationCurrDateDiff
 			}
 		}
 	}
