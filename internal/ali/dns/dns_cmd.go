@@ -8,8 +8,6 @@ import (
 // listDnsByAccount list dns by ali account
 func (d *DnsClient) listDnsByAccount() recordDnsDomains {
 	return d.getAllDnsDomains()
-	//dnsClient := GetDnsClients()[accountName]
-	//return dnsClient.getAllDnsDomains()
 
 }
 
@@ -22,18 +20,6 @@ func (d *DnsClient) isDnsInAccount(domainName string) bool {
 	}
 	return false
 }
-
-// findDnsInAccount reverse dns which ali account
-//func findDnsInAccount(domainName string) (accountName string) {
-//	_domainName := common.DomainSuffix(domainName)
-//	accountMap := account.GetAccountMap()
-//	for _accountName, _ := range accountMap {
-//		if _, ok := listDnsByAccount(_accountName)[_domainName]; ok {
-//			return _accountName
-//		}
-//	}
-//	return ""
-//}
 
 // ListDnsByAccount list dns by ali account
 

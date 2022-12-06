@@ -4,30 +4,37 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package domain
 
 import (
-	"alitool/internal/ali/domain"
+	dm "alitool/internal/ali/domain"
 	"github.com/spf13/cobra"
 )
 
 var (
 	accountName string
+	regionId    string
 	domainName  string
 	reverse     bool
 )
 
+func initDomainClient(accountName, regionId string) dm.IDomainClient {
+	return dm.InitDomainClient(accountName, regionId)
+}
+
 func domainAction() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
 		if accountName != "" && domainName == "" && reverse == false {
-			domain.ListRegisteredDomainByAccount(accountName)
+			domainClient := initDomainClient(accountName, regionId)
+			dm.ListRegisteredDomainByAccount(domainClient)
 			return
 		}
 
 		if accountName != "" && domainName != "" {
-			domain.IsDomainInAccount(accountName, domainName)
+			domainClient := initDomainClient(accountName, regionId)
+			dm.IsDomainInAccount(domainClient, domainName)
 			return
 		}
 
 		if domainName != "" && reverse == true {
-			domain.FindDomainsInAccount(domainName)
+			dm.FindDomainInAccount(domainName)
 			return
 		}
 		cmd.Help()
@@ -49,6 +56,7 @@ func init() {
 
 	DomainCmd.Flags().StringVarP(&domainName, "domain", "i", "", "specific domain name")
 	DomainCmd.Flags().StringVarP(&accountName, "account", "a", "", "specific account name")
+	DomainCmd.Flags().StringVarP(&regionId, "regionId", "z", "", "specific region id")
 	DomainCmd.Flags().BoolVarP(&reverse, "reverse", "r", false, "reverse the domain in account")
 
 	// Here you will define your flags and configuration settings.

@@ -7,7 +7,7 @@ import (
 )
 
 func TestDomainClient_checkDomainStatus(t *testing.T) {
-	//dc := NewDomainClient("cn-shanghai", "", "")
+	//dc := newDomainClient("cn-shanghai", "", "")
 	//dc.getExpireDomains(300)
 }
 

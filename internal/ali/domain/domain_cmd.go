@@ -1,88 +1,65 @@
 package domain
 
 import (
-	"alitool/internal/ali/account"
 	"alitool/internal/pkg/common"
 	"fmt"
 )
 
 // listRegisteredDomainByAccount list registered domain by ali account
-func listRegisteredDomainByAccount(accountName string) recordRegisterDomains {
-	domainClient := GetDomainClients()[accountName]
-	return domainClient.getAllRegisteredDomains()
+func (d *DomainClient) listRegisteredDomainByAccount() recordRegisterDomains {
+	return d.getAllRegisteredDomains()
 }
 
 // isDomainInAccount judge registered domain in account
-func isDomainInAccount(accountName, domainName string) bool {
+func (d *DomainClient) isDomainInAccount(domainName string) bool {
 	_domainName := common.DomainSuffix(domainName)
-	_, ok := listRegisteredDomainByAccount(accountName)[_domainName]
+	_, ok := d.listRegisteredDomainByAccount()[_domainName]
 	if ok {
 		return true
 	}
 	return false
 }
 
-// isDomainInAccount print domain whether in account
-func IsDomainInAccount(accountName, domainName string) {
-	if isDomainInAccount(accountName, domainName) {
-		fmt.Printf("%s exist in %s", domainName, accountName)
-		return
-	}
-	fmt.Printf("%s not exist in %s", domainName, accountName)
-}
-
-// findDomainsInAccount reverse dns which ali account
-func findDomainsInAccount(domainName string) (accountName string) {
-	_domainName := common.DomainSuffix(domainName)
-	accountMap := account.GetAccountMap()
-	for _accountName, _ := range accountMap {
-		if _, ok := listRegisteredDomainByAccount(_accountName)[_domainName]; ok {
-			return _accountName
+// IsDomainInAccount print domain whether in account
+func IsDomainInAccount(i IDomainClient, domainName string) {
+	if common.IsExistAccount(i.getAccountName()) && common.IsValidDomain(domainName) {
+		if i.isDomainInAccount(domainName) {
+			fmt.Printf("%s exist in %s", domainName, i.getAccountName())
+			return
 		}
 	}
-	return ""
+	fmt.Printf("%s not exist in %s", domainName, i.getAccountName())
 }
 
-func FindDomainsInAccount(domainName string) {
-	if accountName := findDomainsInAccount(domainName); accountName != "" {
-		fmt.Printf("domainName: %s exist in %s", domainName, accountName)
-		return
+func FindDomainInAccount(domainName string) {
+	initAllDomainClient()
+	IDomainClients := getDomainClients()
+	for _, v := range IDomainClients {
+		if v.isDomainInAccount(domainName) {
+			fmt.Printf("domainName: %s exist in %s", domainName, v.getAccountName())
+			return
+		}
 	}
 	fmt.Printf("domainName: %s not exist in any account", domainName)
 }
 
 // findExpireDomainsByAccount will return expire domain in specific day and account
 // expireDomains map[domainName]willExpireDay
-func findExpireDomainsByAccount(accountName string, expireDay int) (expireDomains map[string]int) {
-	domainClient := GetDomainClients()[accountName]
-	return domainClient.getExpireDomains(expireDay)
-}
-
-// findExpireDomainsInAllAccounts will return expire domains in all accounts
-func findExpireDomainsInAllAccounts(expireDay int) (expireDomainsInAllAccounts map[string]map[string]int) {
-	expireDomainsInAllAccounts = make(map[string]map[string]int)
-	accountMap := account.GetAccountMap()
-	for _accountName, _ := range accountMap {
-		expireDomainsInOneAccount := findExpireDomainsByAccount(_accountName, expireDay)
-		if len(expireDomainsInOneAccount) > 0 {
-			expireDomainsInAllAccounts[_accountName] = expireDomainsInOneAccount
-		}
-	}
-	return expireDomainsInAllAccounts
+func (d *DomainClient) findExpireDomainsByAccount(i IDomainClient, expireDay int) (expireDomains map[string]int) {
+	return i.getExpireDomains(expireDay)
 }
 
 // findExpireDomainRefAccount will return expire domain and account
-// e.g alitool check  domain -d baidu.com
-func findExpireDomainRefAccount(domainName string) (accountName string, expireDay int) {
-	if accountName := findDomainsInAccount(domainName); accountName != "" {
-		domainClient := GetDomainClients()[accountName]
-		return accountName, domainClient.getDomainExpireCurrDiff(domainName)
+// e.g. alitool check  domain -d baidu.com
+func (d *DomainClient) findExpireDomainRefAccount(domainName string) (accountName string, expireDay int) {
+	if d.isDomainInAccount(domainName) {
+		return d.getAccountName(), d.getDomainExpireCurrDiff(domainName)
 	}
-	return "", 0
+	return d.getAccountName(), -1
 }
 
-func FindExpireDomainRefAccount(domainName string) {
-	accountName, expireDay := findExpireDomainRefAccount(domainName)
+func FindExpireDomainRefAccount(i IDomainClient, domainName string) {
+	accountName, expireDay := i.findExpireDomainRefAccount(domainName)
 	if accountName != "" {
 		fmt.Printf("domain %s found in %s account, expire in %d days\n", domainName, accountName, expireDay)
 		return
@@ -91,10 +68,10 @@ func FindExpireDomainRefAccount(domainName string) {
 
 }
 
-func ListRegisteredDomainByAccount(accountName string) {
-	recordRegisterDomains := listRegisteredDomainByAccount(accountName)
+func ListRegisteredDomainByAccount(i IDomainClient) {
+	recordRegisterDomains := i.listRegisteredDomainByAccount()
 	if len(recordRegisterDomains) > 0 {
-		fmt.Printf("account %s exist registed domain\n", accountName)
+		fmt.Printf("account %s exist registed domain\n", i.getAccountName())
 		for d, _ := range recordRegisterDomains {
 			fmt.Printf("domain: %s\n", d)
 		}
@@ -104,31 +81,23 @@ func ListRegisteredDomainByAccount(accountName string) {
 
 // FindExpireDomainsByAccount will print expire domain in account
 // alitool check  domain -a accountName -e 100
-func FindExpireDomainsByAccount(accountName string, expireDay int) {
-	expireDomains := findExpireDomainsByAccount(accountName, expireDay)
+func FindExpireDomainsByAccount(i IDomainClient, expireDay int) {
+	expireDomains := i.findExpireDomainsByAccount(i, expireDay)
 	if len(expireDomains) > 0 {
 		for d, e := range expireDomains {
-			fmt.Printf("account %s domain %s will expire in %d\n", accountName, d, e)
+			fmt.Printf("account %s domain %s will expire in %d\n", i.getAccountName(), d, e)
 		}
 		return
 	}
-	fmt.Printf("account %s no expire domain in %d days\n", accountName, expireDay)
+	fmt.Printf("account %s no expire domain in %d days\n", i.getAccountName(), expireDay)
 }
 
 // FindExpireDomainsInAllAccounts will print all expire domains in every account
 // alitool check  domain -A -e 100
 func FindExpireDomainsInAllAccounts(expireDay int) {
-	expireDomainsInAllAccounts := findExpireDomainsInAllAccounts(expireDay)
-	if len(expireDomainsInAllAccounts) > 0 {
-		for _account, v := range expireDomainsInAllAccounts {
-			if len(v) > 0 {
-				fmt.Printf("account: %s", _account)
-				for domain, exDay := range v {
-					fmt.Printf("domain: %s, expireDay: %d", domain, exDay)
-				}
-			}
-		}
-		return
+	initAllDomainClient()
+	IDomainClients := getDomainClients()
+	for _, v := range IDomainClients {
+		FindExpireDomainsByAccount(v, expireDay)
 	}
-	fmt.Printf("no expire domain in %d days", expireDay)
 }

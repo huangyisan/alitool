@@ -12,5 +12,5 @@ import (
 func setup() {
 	test.GetEnv()
 	account.InitAccount()
-	InitAllDomainClient()
+	initAllDomainClient()
 }

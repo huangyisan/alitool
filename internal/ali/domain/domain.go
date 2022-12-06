@@ -9,13 +9,26 @@ import (
 )
 
 type DomainClient struct {
-	dc *dm.Client
+	dc          *dm.Client
+	accountName string
+	regionId    string
 }
 
-var domainClients = make(map[string]*DomainClient)
+type IDomainClient interface {
+	getAccountName() string
+	listRegisteredDomainByAccount() recordRegisterDomains
+	isDomainInAccount(string) bool
+	getExpireDomains(int) map[string]int
+	findExpireDomainRefAccount(string) (string, int)
+	findExpireDomainsByAccount(IDomainClient, int) map[string]int
+}
 
-// NewDomainClient will return a domain client
-func NewDomainClient(regionId, accessKeyId, accessKeySecret string) *DomainClient {
+//var domainClients = make(map[string]*DomainClient)
+
+var domainClients = make([]IDomainClient, 0)
+
+// newDomainClient will return a domain client
+func newDomainClient(accountName, regionId, accessKeyId, accessKeySecret string) IDomainClient {
 	op := strategy.Operator{}
 	op.SetServiceClient(&strategy.DomainClient{})
 	c, err := op.NewClient(regionId, accessKeyId, accessKeySecret)
@@ -29,28 +42,33 @@ func NewDomainClient(regionId, accessKeyId, accessKeySecret string) *DomainClien
 	}
 	return &DomainClient{
 		dc,
+		accountName,
+		regionId,
 	}
 }
 
-// initDomainClient to init domain client
-func initDomainClient(accountName, regionId string) *DomainClient {
+// InitDomainClient to init domain client
+func InitDomainClient(accountName, regionId string) IDomainClient {
 	a, ok := account.GetAccount(accountName)
 	if !ok {
 		return nil
 	}
-	dc := NewDomainClient(regionId, a.GetAccessKeyId(), a.GetAccessKeySecret())
+	dc := newDomainClient(accountName, regionId, a.GetAccessKeyId(), a.GetAccessKeySecret())
 	return dc
 }
 
-// InitAllDomainClient will init all DnsClient from .alitool.yaml
-func InitAllDomainClient() {
+// initAllDomainClient will init all DnsClient from .alitool.yaml
+func initAllDomainClient() {
 	accounts := account.GetAccountMap()
 	for k, _ := range accounts {
-		initDomainClient(k, common.DefaultRegionId)
-		domainClients[k] = initDomainClient(k, common.DefaultRegionId)
+		domainClients = append(domainClients, InitDomainClient(k, common.DefaultRegionId))
 	}
 }
 
-func GetDomainClients() map[string]*DomainClient {
+func getDomainClients() []IDomainClient {
 	return domainClients
+}
+
+func (d *DomainClient) getAccountName() string {
+	return d.accountName
 }

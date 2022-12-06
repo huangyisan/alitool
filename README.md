@@ -50,3 +50,4 @@
 - [x] 列出region
    * go run main.go list region
 - [ ] 如果ram user没有权限,则跳过, 并返回错误.
+- [ ] 将提示等输出标准化

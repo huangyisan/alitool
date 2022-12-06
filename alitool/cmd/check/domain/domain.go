@@ -4,31 +4,38 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package domain
 
 import (
-	"alitool/internal/ali/domain"
+	dm "alitool/internal/ali/domain"
 	"github.com/spf13/cobra"
 )
 
 var (
 	domainName     string
 	accountName    string
+	regionId       string
 	checkAllDomain bool
 	expireDay      int
 )
 
+func initDomainClient(accountName, regionId string) dm.IDomainClient {
+	return dm.InitDomainClient(accountName, regionId)
+}
+
 func domainAction() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
 		if checkAllDomain {
-			domain.FindExpireDomainsInAllAccounts(expireDay)
+			dm.FindExpireDomainsInAllAccounts(expireDay)
 			return
 		}
 
 		if accountName != "" && domainName == "" {
-			domain.FindExpireDomainsByAccount(accountName, expireDay)
+			domainClient := initDomainClient(accountName, regionId)
+			dm.FindExpireDomainsByAccount(domainClient, expireDay)
 			return
 		}
 
 		if domainName != "" && accountName == "" {
-			domain.FindExpireDomainRefAccount(domainName)
+			domainClient := initDomainClient(accountName, regionId)
+			dm.FindExpireDomainRefAccount(domainClient, domainName)
 			return
 		}
 		cmd.Help()
@@ -50,6 +57,7 @@ var DomainCmd = &cobra.Command{
 
 func init() {
 	DomainCmd.Flags().StringVarP(&accountName, "account", "a", "", "specific account to check")
+	DomainCmd.Flags().StringVarP(&regionId, "regionId", "z", "cn-shanghai", "specific account region id")
 	DomainCmd.Flags().StringVarP(&domainName, "domain", "d", "", "specific domain to check")
 	DomainCmd.Flags().IntVarP(&expireDay, "end-expire-day", "e", 100, "specific end expire day")
 	DomainCmd.Flags().BoolVarP(&checkAllDomain, "all-domains", "A", false, "check all domains")
