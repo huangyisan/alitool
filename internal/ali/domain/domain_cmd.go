@@ -80,7 +80,7 @@ func ListRegisteredDomainByAccount(i IDomainClient) {
 }
 
 // FindExpireDomainsByAccount will print expire domain in account
-// alitool check  domain -a accountName -e 100
+// alitool check  domain -a AccountName -e 100
 func FindExpireDomainsByAccount(i IDomainClient, expireDay int) {
 	expireDomains := i.findExpireDomainsByAccount(i, expireDay)
 	if len(expireDomains) > 0 {

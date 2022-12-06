@@ -9,9 +9,14 @@ import (
 )
 
 type DomainClient struct {
-	dc          *dm.Client
 	accountName string
 	regionId    string
+	I           iDomainClient
+}
+
+type iDomainClient interface {
+	QueryDomainByDomainName(request *dm.QueryDomainByDomainNameRequest) (response *dm.QueryDomainByDomainNameResponse, err error)
+	QueryDomainList(request *dm.QueryDomainListRequest) (response *dm.QueryDomainListResponse, err error)
 }
 
 type IDomainClient interface {
@@ -27,6 +32,24 @@ type IDomainClient interface {
 
 var domainClients = make([]IDomainClient, 0)
 
+//func newClient(accountName, regionId, accessKeyId, accessKeySecret string, IServiceClient strategy.IServiceClient) interface{} {
+//	op := strategy.Operator{}
+//	op.SetServiceClient(IServiceClient)
+//	c, err := op.NewClient(regionId, accessKeyId, accessKeySecret)
+//	if err != nil {
+//		return nil
+//	}
+//
+//	switch t := c.(type) {
+//	case *dm.Client:
+//		return &DomainClient{
+//			accountName,
+//			regionId,
+//			t,
+//		}
+//	}
+//}
+
 // newDomainClient will return a domain client
 func newDomainClient(accountName, regionId, accessKeyId, accessKeySecret string) IDomainClient {
 	op := strategy.Operator{}
@@ -41,9 +64,9 @@ func newDomainClient(accountName, regionId, accessKeyId, accessKeySecret string)
 		return nil
 	}
 	return &DomainClient{
-		dc,
 		accountName,
 		regionId,
+		dc,
 	}
 }
 
@@ -70,5 +93,5 @@ func getDomainClients() []IDomainClient {
 }
 
 func (d *DomainClient) getAccountName() string {
-	return d.accountName
+	return d.getAccountName()
 }

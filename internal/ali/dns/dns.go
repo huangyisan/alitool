@@ -9,9 +9,13 @@ import (
 )
 
 type DnsClient struct {
-	ac          *alidns.Client
-	accountName string
-	regionId    string
+	AccountName string
+	RegionId    string
+	I           iDnsClient
+}
+
+type iDnsClient interface {
+	DescribeDomains(request *alidns.DescribeDomainsRequest) (response *alidns.DescribeDomainsResponse, err error)
 }
 
 type IDNSClient interface {
@@ -37,9 +41,9 @@ func newDnsClient(accountName, regionId, accessKeyId, accessKeySecret string) ID
 		return nil
 	}
 	return &DnsClient{
-		dc,
 		accountName,
 		regionId,
+		dc,
 	}
 }
 
@@ -66,5 +70,5 @@ func getDnsClients() []IDNSClient {
 }
 
 func (d *DnsClient) getAccountName() string {
-	return d.accountName
+	return d.AccountName
 }

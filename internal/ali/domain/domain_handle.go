@@ -14,7 +14,7 @@ func (d *DomainClient) getRegisteredDomainResponse(domainName string) *dm.QueryD
 	request := dm.CreateQueryDomainByDomainNameRequest()
 	request.Scheme = "https"
 	request.DomainName = domainName
-	response, err := d.dc.QueryDomainByDomainName(request)
+	response, err := d.I.QueryDomainByDomainName(request)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -32,7 +32,7 @@ func (d *DomainClient) getAllRegisteredDomainsResponse() (response []*dm.QueryDo
 
 	for nextFlag {
 		request.PageNum = requests.NewInteger(pageStartNumber)
-		res, err := d.dc.QueryDomainList(request)
+		res, err := d.I.QueryDomainList(request)
 		if err != nil {
 			fmt.Println(err.Error())
 		}

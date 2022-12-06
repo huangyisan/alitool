@@ -22,7 +22,7 @@ func (d *DnsClient) getAllDnsDomains() (hasRecordDomains recordDnsDomains) {
 
 	for nextFlag {
 		request.PageNumber = requests.NewInteger(pageStartNumber)
-		response, err := d.ac.DescribeDomains(request)
+		response, err := d.I.DescribeDomains(request)
 		// get total count
 		totalCount = response.TotalCount
 		if err != nil {

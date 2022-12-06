@@ -4,10 +4,10 @@
 1. 域名服务
    * 域名查询
      - [x] 查询域名是否在该账号
-        - alitool list domain -a accountName -i baidu.com
+        - alitool list domain -a AccountName -i baidu.com
        
      - [x] 列出指定阿里云账号下的全部域名
-       - alitool list domain -a accountName
+       - alitool list domain -a AccountName
        
      - [x] 反查域名隶属哪个阿里云账号
        - alitool list domain -i baidu.com -r
@@ -20,16 +20,16 @@
        - alitool check  domain -d baidu.com
        
      - [x] 查询指定时间内,指定账号中,即将过期的域名
-       - alitool check  domain -a accountName -e 100
+       - alitool check  domain -a AccountName -e 100
        
      - [ ] 域名ssl证书查询
        - 证书ssl查询
 2. dns服务
    - [x] 查询域名dns是否在该账号
-     - alitool list dns -a accountName -i baidu.com
+     - alitool list dns -a AccountName -i baidu.com
 
    - [x] 列出指定账号下的所有dns
-     - alitool list dns -a accountName
+     - alitool list dns -a AccountName
 
    - [x] 给定域名,反查存在哪个账号
      - alitool list dns -i baidu.com -r
