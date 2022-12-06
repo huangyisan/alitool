@@ -9,13 +9,22 @@ import (
 )
 
 type DnsClient struct {
-	ac *alidns.Client
+	ac          *alidns.Client
+	accountName string
+	regionId    string
 }
 
-var dnsClients = make(map[string]*DnsClient)
+type IDNSClient interface {
+	getAccountName() string
+	listDnsByAccount() recordDnsDomains
+	isDnsInAccount(string) bool
+}
 
-// NewDnsClient return DnsClient
-func NewDnsClient(regionId, accessKeyId, accessKeySecret string) *DnsClient {
+// var dnsClients = make(map[string]*DnsClient)
+var dnsClients = make([]IDNSClient, 0)
+
+// newDnsClient return DnsClient
+func newDnsClient(accountName, regionId, accessKeyId, accessKeySecret string) IDNSClient {
 	op := strategy.Operator{}
 	op.SetServiceClient(&strategy.DnsClient{})
 	c, err := op.NewClient(regionId, accessKeyId, accessKeySecret)
@@ -29,28 +38,33 @@ func NewDnsClient(regionId, accessKeyId, accessKeySecret string) *DnsClient {
 	}
 	return &DnsClient{
 		dc,
+		accountName,
+		regionId,
 	}
 }
 
-// initDnsClient will execute NewDnsClient to make a new DnsClient
-func initDnsClient(accountName, regionId string) *DnsClient {
+// InitDnsClient will execute newDnsClient to make a new DnsClient
+func InitDnsClient(accountName, regionId string) IDNSClient {
 	a, ok := account.GetAccount(accountName)
 	if !ok {
 		return nil
 	}
-	dc := NewDnsClient(regionId, a.GetAccessKeyId(), a.GetAccessKeySecret())
+	dc := newDnsClient(accountName, regionId, a.GetAccessKeyId(), a.GetAccessKeySecret())
 	return dc
 }
 
-// InitAllDnsClient will init all DnsClient from .alitool.yaml
-func InitAllDnsClient() {
+// initAllDnsClients will init all DnsClient from .alitool.yaml
+func initAllDnsClients() {
 	accounts := account.GetAccountMap()
 	for k, _ := range accounts {
-		initDnsClient(k, common.DefaultRegionId)
-		dnsClients[k] = initDnsClient(k, common.DefaultRegionId)
+		dnsClients = append(dnsClients, InitDnsClient(k, common.DefaultRegionId))
 	}
 }
 
-func GetDnsClients() map[string]*DnsClient {
+func getDnsClients() []IDNSClient {
 	return dnsClients
+}
+
+func (d *DnsClient) getAccountName() string {
+	return d.accountName
 }

@@ -30,7 +30,7 @@ func domainAction() func(cmd *cobra.Command, args []string) {
 			domain.FindDomainsInAccount(domainName)
 			return
 		}
-		DomainCmd.Help()
+		cmd.Help()
 
 	}
 }

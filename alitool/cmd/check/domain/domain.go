@@ -31,7 +31,7 @@ func domainAction() func(cmd *cobra.Command, args []string) {
 			domain.FindExpireDomainRefAccount(domainName)
 			return
 		}
-		DomainCmd.Help()
+		cmd.Help()
 	}
 }
 

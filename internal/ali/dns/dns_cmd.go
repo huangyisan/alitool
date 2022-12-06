@@ -1,22 +1,22 @@
 package dns
 
 import (
-	"alitool/internal/ali/account"
 	"alitool/internal/pkg/common"
 	"fmt"
 )
 
 // listDnsByAccount list dns by ali account
-func listDnsByAccount(accountName string) recordDnsDomains {
-	dnsClient := GetDnsClients()[accountName]
-	return dnsClient.getAllDnsDomains()
+func (d *DnsClient) listDnsByAccount() recordDnsDomains {
+	return d.getAllDnsDomains()
+	//dnsClient := GetDnsClients()[accountName]
+	//return dnsClient.getAllDnsDomains()
 
 }
 
 // isDnsInAccount judge dns in account
-func isDnsInAccount(accountName, domainName string) bool {
+func (d *DnsClient) isDnsInAccount(domainName string) bool {
 	_domainName := common.DomainSuffix(domainName)
-	_, ok := listDnsByAccount(accountName)[_domainName]
+	_, ok := d.listDnsByAccount()[_domainName]
 	if ok {
 		return true
 	}
@@ -24,50 +24,55 @@ func isDnsInAccount(accountName, domainName string) bool {
 }
 
 // findDnsInAccount reverse dns which ali account
-func findDnsInAccount(domainName string) (accountName string) {
-	_domainName := common.DomainSuffix(domainName)
-	accountMap := account.GetAccountMap()
-	for _accountName, _ := range accountMap {
-		if _, ok := listDnsByAccount(_accountName)[_domainName]; ok {
-			return _accountName
-		}
-	}
-	return ""
-}
+//func findDnsInAccount(domainName string) (accountName string) {
+//	_domainName := common.DomainSuffix(domainName)
+//	accountMap := account.GetAccountMap()
+//	for _accountName, _ := range accountMap {
+//		if _, ok := listDnsByAccount(_accountName)[_domainName]; ok {
+//			return _accountName
+//		}
+//	}
+//	return ""
+//}
 
 // ListDnsByAccount list dns by ali account
-func ListDnsByAccount(accountName string) {
-	if common.IsExistAccount(accountName) {
-		hasRecordDomains := listDnsByAccount(accountName)
-		fmt.Printf("%s has dns record:\n", accountName)
+
+func ListDnsByAccount(i IDNSClient) {
+	if common.IsExistAccount(i.getAccountName()) {
+		hasRecordDomains := i.listDnsByAccount()
+		fmt.Printf("%s has dns record:\n", i.getAccountName())
 		for record, _ := range hasRecordDomains {
 			fmt.Println(record)
 		}
 		return
 	}
-	fmt.Printf("%s is right?\n", accountName)
+	fmt.Printf("%s is right?\n", i.getAccountName())
 }
 
 // IsDnsInAccount judge dns in account
-func IsDnsInAccount(accountName, domainName string) {
-	if common.IsExistAccount(accountName) && common.IsValidDomain(domainName) {
-		if ok := isDnsInAccount(accountName, domainName); ok {
-			fmt.Printf("%s exist in %s\n", common.DomainSuffix(domainName), accountName)
+func IsDnsInAccount(i IDNSClient, domainName string) {
+	if common.IsExistAccount(i.getAccountName()) && common.IsValidDomain(domainName) {
+		if ok := i.isDnsInAccount(domainName); ok {
+			fmt.Printf("%s exist in %s\n", common.DomainSuffix(domainName), i.getAccountName())
 			return
 		}
-		fmt.Printf("%s not exist in %s\n", domainName, accountName)
+		fmt.Printf("%s not exist in %s\n", domainName, i.getAccountName())
 		return
 	}
-	fmt.Printf("invalid account: %s or domain: %s \n", accountName, domainName)
+	fmt.Printf("invalid account: %s or domain: %s \n", i.getAccountName(), domainName)
 
 }
 
 // FindDnsInAccount find dns in which account
 func FindDnsInAccount(domainName string) {
-	accountName := findDnsInAccount(domainName)
-	if accountName != "" {
-		fmt.Printf("domain name %s in %s account\n", common.DomainSuffix(domainName), accountName)
-		return
+	initAllDnsClients()
+	IDnsClients := getDnsClients()
+	for _, v := range IDnsClients {
+		if v.isDnsInAccount(domainName) {
+			fmt.Printf("domain name %s in %s account\n", common.DomainSuffix(domainName), v.getAccountName())
+			return
+		}
 	}
+
 	fmt.Printf("domain name %s not in any accounts\n", common.DomainSuffix(domainName))
 }

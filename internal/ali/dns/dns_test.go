@@ -10,7 +10,7 @@ import (
 func setup() {
 	test.GetEnv()
 	account.InitAccount()
-	InitAllDnsClient()
+	initAllDnsClients()
 }
 
 func Test_initDnsClient(t *testing.T) {
@@ -39,7 +39,7 @@ func Test_initDnsClient(t *testing.T) {
 				accessKeySecret: "def",
 			},
 			mockFunc: func(regionId, accessKeyId, accessKeySecret string) *DnsClient {
-				return NewDnsClient(regionId, accessKeyId, accessKeySecret)
+				return newDnsClient(regionId, accessKeyId, accessKeySecret)
 			},
 			want: &DnsClient{},
 		},
@@ -61,8 +61,8 @@ func Test_initDnsClient(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.want = tt.mockFunc(tt.args.regionId, tt.args.accessKeyId, tt.args.accessKeySecret)
-			if got := initDnsClient(tt.args.accountName, tt.args.regionId); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("initDnsClient() = %#v, want %v", got, tt.want)
+			if got := InitDnsClient(tt.args.accountName, tt.args.regionId); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("InitDnsClient() = %#v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -88,7 +88,7 @@ func TestNewDnsClient(t *testing.T) {
 				accessKeySecret: "def",
 			},
 			mockFunc: func(regionId, accessKeyId, accessKeySecret string) *DnsClient {
-				return NewDnsClient(regionId, accessKeyId, accessKeySecret)
+				return newDnsClient(regionId, accessKeyId, accessKeySecret)
 			},
 			want: nil},
 		// TODO: Add test cases.
@@ -96,8 +96,8 @@ func TestNewDnsClient(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.want = tt.mockFunc(tt.args.regionId, tt.args.accessKeyId, tt.args.accessKeySecret)
-			if got := NewDnsClient(tt.args.regionId, tt.args.accessKeyId, tt.args.accessKeySecret); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewDnsClient() = %v, want %v", got, tt.want)
+			if got := newDnsClient(tt.args.regionId, tt.args.accessKeyId, tt.args.accessKeySecret); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("newDnsClient() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -105,5 +105,5 @@ func TestNewDnsClient(t *testing.T) {
 
 func Test_initAllDnsClient(t *testing.T) {
 	setup()
-	InitAllDnsClient()
+	initAllDnsClients()
 }

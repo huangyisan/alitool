@@ -5,18 +5,23 @@ package dns
 
 import (
 	_dns "alitool/internal/ali/dns"
-	"fmt"
 	"github.com/spf13/cobra"
 )
 
 var (
 	domainName  string
 	accountName string
+	regionId    string
 	reverse     bool
 )
 
+func createDNSClient(accountName, regionId string) _dns.IDNSClient {
+	return _dns.InitDnsClient(accountName, regionId)
+}
+
 func dnsAction() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
+
 		//exist reverse flag
 		if reverse && domainName != "" {
 			_dns.FindDnsInAccount(domainName)
@@ -24,18 +29,16 @@ func dnsAction() func(cmd *cobra.Command, args []string) {
 		}
 
 		if accountName != "" && domainName != "" {
-			_dns.IsDnsInAccount(accountName, domainName)
+			iDns := createDNSClient(accountName, regionId)
+			_dns.IsDnsInAccount(iDns, domainName)
 			return
 		}
 
 		if accountName != "" && domainName == "" {
-			_dns.ListDnsByAccount(accountName)
+			iDns := createDNSClient(accountName, regionId)
+			_dns.ListDnsByAccount(iDns)
 			return
 		}
-
-		fmt.Println("tmp: exec no")
-		fmt.Println(accountName)
-		fmt.Println("tmp: exec no")
 		cmd.Help()
 	}
 }
@@ -57,6 +60,7 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	DnsCmd.Flags().StringVarP(&domainName, "domain", "i", "", "specific domain name")
 	DnsCmd.Flags().StringVarP(&accountName, "account", "a", "", "specific account name")
+	DnsCmd.Flags().StringVarP(&regionId, "region", "z", "cn-shanghai", "specific account region")
 	DnsCmd.Flags().BoolVarP(&reverse, "reverse", "r", false, "reverse the domain in account")
 
 	// only one command execute at one time
