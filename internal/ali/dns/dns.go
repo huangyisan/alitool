@@ -41,9 +41,9 @@ func newDnsClient(accountName, regionId, accessKeyId, accessKeySecret string) ID
 		return nil
 	}
 	return &DnsClient{
-		accountName,
-		regionId,
-		dc,
+		AccountName: accountName,
+		RegionId:    regionId,
+		I:           dc,
 	}
 }
 
