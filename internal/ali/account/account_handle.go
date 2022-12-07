@@ -1,5 +1,6 @@
 package account
 
+// GetAccount will return a aliAccount
 func GetAccount(accountName string) (*aliAccount, bool) {
 	v, ok := accountMap[accountName]
 	if ok {
@@ -12,6 +13,7 @@ func GetAccount(accountName string) (*aliAccount, bool) {
 	return nil, false
 }
 
+// getAccountMap Will return accountMap
 func getAccountMap() map[string]map[string]string {
 	return accountMap
 }
