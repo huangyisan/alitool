@@ -33,10 +33,6 @@ func (a *aliAccount) GetAccessKeySecret() string {
 	return a.AccessKeySecret
 }
 
-//func GetAllAliAccounts() Accounts {
-//	return accounts
-//}
-
 func accountUnmarshal() {
 	viper.Unmarshal(&accounts)
 }

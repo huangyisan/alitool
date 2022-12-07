@@ -14,6 +14,9 @@ type DnsClient struct {
 	I           iDnsClient
 }
 
+// var dnsClients = make(map[string]*DnsClient)
+var dnsClients = make([]IDNSClient, 0)
+
 type iDnsClient interface {
 	DescribeDomains(request *alidns.DescribeDomainsRequest) (response *alidns.DescribeDomainsResponse, err error)
 }
@@ -23,9 +26,6 @@ type IDNSClient interface {
 	listDnsByAccount() recordDnsDomains
 	isDnsInAccount(string) bool
 }
-
-// var dnsClients = make(map[string]*DnsClient)
-var dnsClients = make([]IDNSClient, 0)
 
 // newDnsClient return DnsClient
 func newDnsClient(accountName, regionId, accessKeyId, accessKeySecret string) IDNSClient {
