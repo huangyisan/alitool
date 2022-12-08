@@ -2,7 +2,6 @@ package dns
 
 import (
 	"alitool/internal/ali/account"
-	"alitool/internal/pkg/test"
 	"github.com/agiledragon/gomonkey/v2"
 	"github.com/smartystreets/goconvey/convey"
 	"reflect"
@@ -10,12 +9,11 @@ import (
 )
 
 func setup() {
-	test.GetEnv()
-	account.InitAccount()
+	//test.GetEnv()
+	//account.InitAccount()
 }
 
 func Test_newDnsClient(t *testing.T) {
-	setup()
 	type args struct {
 		regionId        string
 		accessKeyId     string
@@ -52,6 +50,7 @@ func Test_newDnsClient(t *testing.T) {
 func TestInitDnsClient(t *testing.T) {
 	var i IDNSClient
 	convey.Convey("Patched account.GetAccount func", t, func() {
+
 		var mockGetAccount = gomonkey.ApplyFunc(account.GetAccount, func(accountName string) (*account.AliAccount, bool) {
 			return &account.AliAccount{
 				"account_01_patched",
@@ -62,7 +61,7 @@ func TestInitDnsClient(t *testing.T) {
 		defer mockGetAccount.Reset()
 		convey.Convey("Give accountName,", func() {
 			dnsClient := InitDnsClient("account_01_patched", "cn-shanghai")
-			convey.So(dnsClient, convey.ShouldHaveSameTypeAs, i)
+			convey.So(dnsClient, convey.ShouldEqual, i)
 		})
 	})
 }
@@ -106,7 +105,7 @@ func Test_getDnsClients(t *testing.T) {
 		want []IDNSClient
 	}{
 		{
-			name: "base case 01",
+			name: "base case01",
 		},
 	}
 	for _, tt := range tests {
