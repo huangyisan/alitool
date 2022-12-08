@@ -1,11 +1,11 @@
 package account
 
-// GetAccount will return a aliAccount
-func GetAccount(accountName string) (*aliAccount, bool) {
+// GetAccount will return a AliAccount
+func GetAccount(accountName string) (*AliAccount, bool) {
 	v, ok := accountMap[accountName]
 	if ok {
-		return &aliAccount{
-			Alias:           accountName,
+		return &AliAccount{
+			AccountName:     accountName,
 			AccessKeyId:     v["accessKeyId"],
 			AccessKeySecret: v["accessKeySecret"],
 		}, true

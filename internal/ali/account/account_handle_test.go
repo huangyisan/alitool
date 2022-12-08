@@ -14,12 +14,12 @@ func TestGetAccount(t *testing.T) {
 	tests := []struct {
 		name  string
 		args  args
-		want  *aliAccount
+		want  *AliAccount
 		want1 bool
 	}{
 		{"base case",
-			struct{ accountName string }{accountName: "ali_account_01"}, &aliAccount{
-				Alias:           "ali_account_01",
+			struct{ accountName string }{accountName: "ali_account_01"}, &AliAccount{
+				AccountName:     "ali_account_01",
 				AccessKeyId:     "abc",
 				AccessKeySecret: "def",
 			}, true},

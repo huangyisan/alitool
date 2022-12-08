@@ -46,8 +46,8 @@ func Test_aliAccount_GetAccessKeyId(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &aliAccount{
-				Alias:           tt.fields.Alias,
+			a := &AliAccount{
+				AccountName:     tt.fields.Alias,
 				AccessKeyId:     tt.fields.AccessKeyId,
 				AccessKeySecret: tt.fields.AccessKeySecret,
 			}
@@ -90,8 +90,8 @@ func Test_aliAccount_GetAccessKeySecret(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &aliAccount{
-				Alias:           tt.fields.Alias,
+			a := &AliAccount{
+				AccountName:     tt.fields.Alias,
 				AccessKeyId:     tt.fields.AccessKeyId,
 				AccessKeySecret: tt.fields.AccessKeySecret,
 			}
