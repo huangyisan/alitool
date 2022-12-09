@@ -42,6 +42,7 @@ func Test_newDnsClient(t *testing.T) {
 	}
 }
 
+// go:noinline
 func TestInitDnsClient(t *testing.T) {
 	wantAccountName := "account_01_patched"
 	convey.Convey("Patched account.GetAccount func", t, func() {
@@ -113,6 +114,7 @@ func Test_getDnsClients(t *testing.T) {
 	}
 }
 
+// go:noinline
 func Test_initAllDnsClients(t *testing.T) {
 	convey.Convey("Mock account.GetAccountMap", t, func() {
 
