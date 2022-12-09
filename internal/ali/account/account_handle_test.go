@@ -65,3 +65,38 @@ func Test_getAccountMap(t *testing.T) {
 		})
 	}
 }
+
+func TestIsExistAccount(t *testing.T) {
+	type args struct {
+		accountName string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "true case",
+			args: args{
+				accountName: "test_account_01_patched",
+			},
+			want: true,
+		},
+		{
+			name: "false case",
+			args: args{
+				accountName: "test_account_02_patched",
+			},
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			patches := gomonkey.ApplyGlobalVar(&accountMap, map[string]map[string]string{"test_account_01_patched": {}})
+			defer patches.Reset()
+			if got := IsExistAccount(tt.args.accountName); got != tt.want {
+				t.Errorf("IsExistAccount() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

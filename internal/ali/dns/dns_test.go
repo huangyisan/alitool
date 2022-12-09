@@ -53,9 +53,9 @@ func TestInitDnsClient(t *testing.T) {
 
 		var mockGetAccount = gomonkey.ApplyFunc(account.GetAccount, func(accountName string) (*account.AliAccount, bool) {
 			return &account.AliAccount{
-				"account_01_patched",
-				"abc",
-				"def",
+				AccountName:     "account_01_patched",
+				AccessKeyId:     "abc",
+				AccessKeySecret: "def",
 			}, true
 		})
 		defer mockGetAccount.Reset()

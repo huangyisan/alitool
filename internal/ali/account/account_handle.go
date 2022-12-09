@@ -17,3 +17,12 @@ func GetAccount(accountName string) (*AliAccount, bool) {
 func getAccountMap() map[string]map[string]string {
 	return accountMap
 }
+
+// IsExistAccount will return true if account in accountMap, else false
+func IsExistAccount(accountName string) bool {
+	_, ok := GetAccount(accountName)
+	if ok {
+		return true
+	}
+	return false
+}
