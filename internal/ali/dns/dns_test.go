@@ -8,11 +8,6 @@ import (
 	"testing"
 )
 
-func setup() {
-	//test.GetEnv()
-	//account.InitAccount()
-}
-
 func Test_newDnsClient(t *testing.T) {
 	type args struct {
 		regionId        string
@@ -48,20 +43,21 @@ func Test_newDnsClient(t *testing.T) {
 }
 
 func TestInitDnsClient(t *testing.T) {
-	var i IDNSClient
+	wantAccountName := "account_01_patched"
 	convey.Convey("Patched account.GetAccount func", t, func() {
-
-		var mockGetAccount = gomonkey.ApplyFunc(account.GetAccount, func(accountName string) (*account.AliAccount, bool) {
+		patches := gomonkey.ApplyFunc(account.GetAccount, func(accountName string) (*account.AliAccount, bool) {
 			return &account.AliAccount{
-				AccountName:     "account_01_patched",
+				AccountName:     wantAccountName,
 				AccessKeyId:     "abc",
 				AccessKeySecret: "def",
 			}, true
 		})
-		defer mockGetAccount.Reset()
+		defer patches.Reset()
+
 		convey.Convey("Give accountName,", func() {
-			dnsClient := InitDnsClient("account_01_patched", "cn-shanghai")
-			convey.So(dnsClient, convey.ShouldEqual, i)
+			dnsClient := InitDnsClient(wantAccountName, "cn-shanghai")
+			wantClient := newDnsClient(wantAccountName, "cn-shanghai", "abc", "def")
+			convey.So(dnsClient, convey.ShouldResemble, wantClient)
 		})
 	})
 }
@@ -115,4 +111,42 @@ func Test_getDnsClients(t *testing.T) {
 			}
 		})
 	}
+}
+
+func Test_initAllDnsClients(t *testing.T) {
+	convey.Convey("Mock account.GetAccountMap", t, func() {
+
+		patches := gomonkey.ApplyFunc(account.GetAccountMap, func() map[string]map[string]string {
+			return map[string]map[string]string{
+				"account01": {
+					"accessKeyId":     "accessKeyId01",
+					"accessKeySecret": "accessKeySecret01",
+				},
+				"account02": {
+					"accessKeyId":     "accessKeyId02",
+					"accessKeySecret": "accessKeySecret02",
+				}}
+		})
+		defer patches.Reset()
+
+		convey.Convey("Mock account.AliAccount", func() {
+			patches := gomonkey.ApplyFunc(account.GetAccount, func(string) (*account.AliAccount, bool) {
+				return &account.AliAccount{
+					AccountName:     "account01",
+					AccessKeyId:     "accessKeyId01",
+					AccessKeySecret: "accessKeySecret01",
+				}, true
+			})
+			defer patches.Reset()
+
+			convey.Convey("initAllDnsClients", func() {
+				initAllDnsClients()
+				want := []IDNSClient{
+					InitDnsClient("account01", "cn-shanghai"),
+					InitDnsClient("account02", "cn-shanghai"),
+				}
+				convey.So(dnsClients, convey.ShouldResemble, want)
+			})
+		})
+	})
 }
