@@ -25,12 +25,10 @@ func GetAccountMap() map[string]map[string]string {
 	return accountMap
 }
 
-// GetAccessKeyId return AccessKeyId
 func (a *AliAccount) GetAccessKeyId() string {
 	return a.AccessKeyId
 }
 
-// GetAccessKeySecret return AccessKeySecret
 func (a *AliAccount) GetAccessKeySecret() string {
 	return a.AccessKeySecret
 }

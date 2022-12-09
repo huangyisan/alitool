@@ -7,7 +7,6 @@ import (
 )
 
 func TestGetAccount(t *testing.T) {
-	setup()
 	type args struct {
 		accountName string
 	}
