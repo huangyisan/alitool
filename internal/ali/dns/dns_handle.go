@@ -40,12 +40,3 @@ func (d *DnsClient) getAllDnsDomains() (hasRecordDomains recordDnsDomains) {
 
 	return hasRecordDomains
 }
-
-func (d *DnsClient) isDNSExist(domainName string) {
-	_, ok := d.getAllDnsDomains()[domainName]
-	if ok {
-		fmt.Printf("exist domain: %s", domainName)
-		return
-	}
-	fmt.Printf("not exist domain: %s", domainName)
-}
