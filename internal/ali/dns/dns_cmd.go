@@ -22,7 +22,6 @@ func (d *DnsClient) isDnsInAccount(domainName string) bool {
 }
 
 // ListDnsByAccount list dns by ali account
-
 func ListDnsByAccount(i IDNSClient) {
 	if account.IsExistAccount(i.getAccountName()) {
 		hasRecordDomains := i.listDnsByAccount()

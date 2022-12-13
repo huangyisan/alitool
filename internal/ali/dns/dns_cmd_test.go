@@ -18,7 +18,6 @@ func Test_listDnsByAccount(t *testing.T) {
 			hasRecordDomains := d.listDnsByAccount()
 			convey.So(hasRecordDomains, convey.ShouldResemble, recordDnsDomains{"test.com": struct{}{}})
 		})
-
 	})
 }
 
