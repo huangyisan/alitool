@@ -3,6 +3,7 @@ package domain
 import (
 	"alitool/internal/ali/account"
 	"alitool/internal/pkg/common"
+	. "alitool/internal/pkg/mylog"
 	"fmt"
 )
 
@@ -25,11 +26,11 @@ func (d *DomainClient) isDomainInAccount(domainName string) bool {
 func IsDomainInAccount(i IDomainClient, domainName string) {
 	if account.IsExistAccount(i.getAccountName()) && common.IsValidDomain(domainName) {
 		if i.isDomainInAccount(domainName) {
-			fmt.Printf("%s exist in %s", domainName, i.getAccountName())
+			LoggerNoT.Printf("%s exist in %s", domainName, i.getAccountName())
 			return
 		}
 	}
-	fmt.Printf("%s not exist in %s", domainName, i.getAccountName())
+	LoggerNoT.Printf("%s not exist in %s", domainName, i.getAccountName())
 }
 
 func FindDomainInAccount(domainName string) {

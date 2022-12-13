@@ -9,8 +9,8 @@ import (
 )
 
 type DomainClient struct {
-	accountName string
-	regionId    string
+	AccountName string
+	RegionId    string
 	I           iDomainClient
 }
 
@@ -73,5 +73,5 @@ func getDomainClients() []IDomainClient {
 }
 
 func (d *DomainClient) getAccountName() string {
-	return d.getAccountName()
+	return d.AccountName
 }

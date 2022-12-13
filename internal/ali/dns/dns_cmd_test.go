@@ -45,8 +45,6 @@ func Test_isDnsInAccount(t *testing.T) {
 	})
 }
 
-// ListDnsByAccount
-
 var mockAccountName = "mockAccountName"
 var mockDnsRecord = "test.com"
 

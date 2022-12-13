@@ -65,7 +65,6 @@ func Test_newDnsClient(t *testing.T) {
 	})
 }
 
-// go:noinline
 func TestInitDnsClient(t *testing.T) {
 	wantAccountName := "account_01_patched"
 	convey.Convey("Patched account.GetAccount func true", t, func() {
@@ -102,7 +101,7 @@ func TestInitDnsClient(t *testing.T) {
 	})
 }
 
-func TestDnsClient_getAccountName(t *testing.T) {
+func Test_getAccountName(t *testing.T) {
 	type fields struct {
 		AccountName string
 		RegionId    string
