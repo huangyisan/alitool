@@ -74,7 +74,7 @@ func (m *mockIDomainClient) isDomainInAccount(s string) bool {
 }
 
 func (m *mockIDomainClient) getExpireDomains(i int) expireDomainsInfo {
-	return map[string]int{"www.test.com": i}
+	return map[string]int{mockDomainRecord: i}
 }
 
 func (m *mockIDomainClient) findExpireDomainRefAccount(s string) (string, int) {
