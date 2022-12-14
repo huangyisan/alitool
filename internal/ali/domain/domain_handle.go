@@ -60,7 +60,7 @@ func (d *DomainClient) getAllRegisteredDomains() (hasRecordDomains recordRegiste
 }
 
 // getExpireDomains will print all the domain expire day in ali account
-func (d *DomainClient) getExpireDomains(expireDay int) (expireDomains map[string]int) {
+func (d *DomainClient) getExpireDomains(expireDay int) (expireDomains expireDomainsInfo) {
 	expireDomains = make(map[string]int)
 	for _, dms := range d.getAllRegisteredDomainsResponse() {
 		for _, _dm := range dms.Data.Domain {

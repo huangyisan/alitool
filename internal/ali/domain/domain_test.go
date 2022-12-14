@@ -134,6 +134,8 @@ func Test_initAllDomainClient(t *testing.T) {
 					InitDomainClient("account02", "cn-shanghai"),
 				}
 				convey.So(domainClients, convey.ShouldResemble, want)
+				// reset global var domainClients
+				domainClients = make([]IDomainClient, 0)
 			})
 		})
 	})
