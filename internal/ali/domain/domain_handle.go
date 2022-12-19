@@ -3,7 +3,6 @@ package domain
 import (
 	"alitool/internal/pkg/common"
 	. "alitool/internal/pkg/mylog"
-	"fmt"
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	dm "github.com/aliyun/alibaba-cloud-sdk-go/services/domain"
 )
@@ -35,7 +34,8 @@ func (d *DomainClient) getAllRegisteredDomainsResponse() (response []*dm.QueryDo
 		request.PageNum = requests.NewInteger(pageStartNumber)
 		res, err := d.I.QueryDomainList(request)
 		if err != nil {
-			fmt.Println(err.Error())
+			LoggerNoT.Println(err.Error())
+			return nil
 		}
 		// literal results
 		response = append(response, res)

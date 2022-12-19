@@ -39,3 +39,43 @@ func Test_getRegisteredDomainResponse(t *testing.T) {
 		convey.So(res, convey.ShouldEqual, mockResponse)
 	})
 }
+
+func Test_getAllRegisteredDomainsResponse(t *testing.T) {
+	mockDomain := "test.com"
+	mockAccountName := "testAccount"
+	mockRegionId := "cn-shanghai"
+	mockI := domain.Client{}
+	var dc *domain.Client
+	d := DomainClient{
+		mockAccountName,
+		mockRegionId,
+		&mockI,
+	}
+	mockQueryDomainListResponse := &domain.QueryDomainListResponse{
+		NextPage:  false,
+		RequestId: "testID",
+		Data: domain.DataInQueryDomainList{
+			Domain: []domain.Domain{
+				{
+					DomainName: mockDomain,
+				},
+			},
+		},
+	}
+	convey.Convey("mock QueryDomainList return err", t, func() {
+		patches := gomonkey.ApplyMethod(dc, "QueryDomainList", func(_ *domain.Client, request *domain.QueryDomainListRequest) (response *domain.QueryDomainListResponse, err error) {
+			return nil, fmt.Errorf("mock error")
+		})
+		defer patches.Reset()
+		res := d.getAllRegisteredDomainsResponse()
+		convey.So(res, convey.ShouldEqual, nil)
+	})
+	convey.Convey("mock QueryDomainList", t, func() {
+		patches := gomonkey.ApplyMethod(dc, "QueryDomainList", func(_ *domain.Client, request *domain.QueryDomainListRequest) (response *domain.QueryDomainListResponse, err error) {
+			return mockQueryDomainListResponse, nil
+		})
+		defer patches.Reset()
+		res := d.getAllRegisteredDomainsResponse()
+		convey.So(res, convey.ShouldResemble, []*domain.QueryDomainListResponse{mockQueryDomainListResponse})
+	})
+}
