@@ -70,10 +70,10 @@ func (d *DomainClient) getExpireDomains(expireDay int) (expireDomains expireDoma
 			}
 		}
 	}
-	if len(expireDomains) > 1 {
+	if len(expireDomains) > 0 {
 		return expireDomains
 	}
-	return nil
+	return expireDomains
 }
 
 // getDomainExpireCurrDiff will print the specific domain will remain someday to expire

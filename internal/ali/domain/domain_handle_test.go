@@ -79,3 +79,105 @@ func Test_getAllRegisteredDomainsResponse(t *testing.T) {
 		convey.So(res, convey.ShouldResemble, []*domain.QueryDomainListResponse{mockQueryDomainListResponse})
 	})
 }
+
+func Test_getAllRegisteredDomains(t *testing.T) {
+	var dc *DomainClient
+	mockDomain := "test.com"
+	mockQueryDomainListResponse := &domain.QueryDomainListResponse{
+		NextPage:  false,
+		RequestId: "testID",
+		Data: domain.DataInQueryDomainList{
+			Domain: []domain.Domain{
+				{
+					DomainName:             mockDomain,
+					ExpirationCurrDateDiff: 20,
+				},
+			},
+		},
+	}
+	convey.Convey("mock getAllRegisteredDomainsResponse", t, func() {
+		patches := gomonkey.ApplyPrivateMethod(dc, "getAllRegisteredDomainsResponse", func(_ *DomainClient) (response []*domain.QueryDomainListResponse) {
+			return []*domain.QueryDomainListResponse{
+				mockQueryDomainListResponse,
+			}
+		})
+		defer patches.Reset()
+		res := dc.getAllRegisteredDomains()
+		convey.So(res, convey.ShouldResemble, recordRegisterDomains{"test.com": struct{}{}})
+	})
+	convey.Convey("mock getAllRegisteredDomainsResponse return nil", t, func() {
+		patches := gomonkey.ApplyPrivateMethod(dc, "getAllRegisteredDomainsResponse", func(_ *DomainClient) (response []*domain.QueryDomainListResponse) {
+			return nil
+		})
+		defer patches.Reset()
+		res := dc.getAllRegisteredDomains()
+		convey.So(res, convey.ShouldResemble, recordRegisterDomains{})
+	})
+
+}
+
+func Test_getExpireDomains(t *testing.T) {
+	var dc *DomainClient
+	mockDomain := "test.com"
+	mockExpirationCurrDateDiff := 20
+	mockQueryDomainListResponse := &domain.QueryDomainListResponse{
+		NextPage:  false,
+		RequestId: "testID",
+		Data: domain.DataInQueryDomainList{
+			Domain: []domain.Domain{
+				{
+					DomainName:             mockDomain,
+					ExpirationCurrDateDiff: mockExpirationCurrDateDiff,
+				},
+			},
+		},
+	}
+
+	convey.Convey("mock getAllRegisteredDomainsResponse return nil", t, func() {
+		patches := gomonkey.ApplyPrivateMethod(dc, "getAllRegisteredDomainsResponse", func(_ *DomainClient) (response []*domain.QueryDomainListResponse) {
+			return nil
+		})
+		defer patches.Reset()
+		res := dc.getExpireDomains(mockExpireDay)
+		convey.So(res, convey.ShouldResemble, expireDomainsInfo{})
+	})
+	convey.Convey("mock getAllRegisteredDomainsResponse return normal, in expireDay", t, func() {
+		mockExpireDay := 30
+		patches := gomonkey.ApplyPrivateMethod(dc, "getAllRegisteredDomainsResponse", func(_ *DomainClient) (response []*domain.QueryDomainListResponse) {
+			return []*domain.QueryDomainListResponse{mockQueryDomainListResponse}
+		})
+		defer patches.Reset()
+		res := dc.getExpireDomains(mockExpireDay)
+		convey.So(res, convey.ShouldResemble, expireDomainsInfo{mockDomain: mockExpirationCurrDateDiff})
+	})
+	convey.Convey("mock getAllRegisteredDomainsResponse return normal, not in expireDay", t, func() {
+		mockExpireDay := 10
+		patches := gomonkey.ApplyPrivateMethod(dc, "getAllRegisteredDomainsResponse", func(_ *DomainClient) (response []*domain.QueryDomainListResponse) {
+			return []*domain.QueryDomainListResponse{mockQueryDomainListResponse}
+		})
+		defer patches.Reset()
+		res := dc.getExpireDomains(mockExpireDay)
+		convey.So(res, convey.ShouldResemble, expireDomainsInfo{})
+	})
+}
+
+func Test_getDomainExpireCurrDiff(t *testing.T) {
+	mockI := domain.Client{}
+	dc := &DomainClient{
+		I: &mockI,
+	}
+	mockDomain := "test.com"
+	mockExpirationCurrDateDiff := 20
+	mockQueryDomainByDomainNameResponse := &domain.QueryDomainByDomainNameResponse{
+		DomainName:             mockDomain,
+		ExpirationCurrDateDiff: mockExpirationCurrDateDiff,
+	}
+	convey.Convey("mock getRegisteredDomainResponse", t, func() {
+		patches := gomonkey.ApplyPrivateMethod(dc, "getRegisteredDomainResponse", func(_ *DomainClient, domainName string) *domain.QueryDomainByDomainNameResponse {
+			return mockQueryDomainByDomainNameResponse
+		})
+		defer patches.Reset()
+		res := dc.getDomainExpireCurrDiff(mockDomain)
+		convey.So(res, convey.ShouldEqual, mockExpirationCurrDateDiff)
+	})
+}
