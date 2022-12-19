@@ -1,9 +1,11 @@
 package account
 
-import "fmt"
+import (
+	. "alitool/internal/pkg/mylog"
+)
 
 func ListRegion() {
 	for k, v := range getRegionList() {
-		fmt.Println(k, v)
+		LoggerNoT.Info(k, v)
 	}
 }

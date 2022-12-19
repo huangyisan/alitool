@@ -9,10 +9,12 @@ import (
 )
 
 type DomainClient struct {
-	accountName string
-	regionId    string
+	AccountName string
+	RegionId    string
 	I           iDomainClient
 }
+
+type expireDomainsInfo map[string]int
 
 type iDomainClient interface {
 	QueryDomainByDomainName(request *dm.QueryDomainByDomainNameRequest) (response *dm.QueryDomainByDomainNameResponse, err error)
@@ -23,9 +25,9 @@ type IDomainClient interface {
 	getAccountName() string
 	listRegisteredDomainByAccount() recordRegisterDomains
 	isDomainInAccount(string) bool
-	getExpireDomains(int) map[string]int
+	getExpireDomains(int) expireDomainsInfo
+	findExpireDomainsByAccount(int) expireDomainsInfo
 	findExpireDomainRefAccount(string) (string, int)
-	findExpireDomainsByAccount(IDomainClient, int) map[string]int
 }
 
 var domainClients = make([]IDomainClient, 0)
@@ -73,5 +75,5 @@ func getDomainClients() []IDomainClient {
 }
 
 func (d *DomainClient) getAccountName() string {
-	return d.getAccountName()
+	return d.AccountName
 }

@@ -1,10 +1,13 @@
 package account
 
-import "fmt"
+import (
+	. "alitool/internal/pkg/mylog"
+)
 
+// ListAccount will print all AliAccount
 func ListAccount() {
-	fmt.Printf("Account List:\n\n")
+	LoggerNoT.Infof("Account List:\n\n")
 	for k, _ := range getAccountMap() {
-		fmt.Printf("%s\n", k)
+		LoggerNoT.Infof("%s\n", k)
 	}
 }

@@ -8,11 +8,18 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 )
 
+var (
+	_ IDNSClient = (*DnsClient)(nil)
+)
+
 type DnsClient struct {
 	AccountName string
 	RegionId    string
 	I           iDnsClient
 }
+
+// var dnsClients = make(map[string]*DnsClient)
+var dnsClients = make([]IDNSClient, 0)
 
 type iDnsClient interface {
 	DescribeDomains(request *alidns.DescribeDomainsRequest) (response *alidns.DescribeDomainsResponse, err error)
@@ -23,9 +30,6 @@ type IDNSClient interface {
 	listDnsByAccount() recordDnsDomains
 	isDnsInAccount(string) bool
 }
-
-// var dnsClients = make(map[string]*DnsClient)
-var dnsClients = make([]IDNSClient, 0)
 
 // newDnsClient return DnsClient
 func newDnsClient(accountName, regionId, accessKeyId, accessKeySecret string) IDNSClient {
@@ -41,9 +45,9 @@ func newDnsClient(accountName, regionId, accessKeyId, accessKeySecret string) ID
 		return nil
 	}
 	return &DnsClient{
-		accountName,
-		regionId,
-		dc,
+		AccountName: accountName,
+		RegionId:    regionId,
+		I:           dc,
 	}
 }
 
@@ -65,10 +69,12 @@ func initAllDnsClients() {
 	}
 }
 
+// getDnsClients will return dnsClients
 func getDnsClients() []IDNSClient {
 	return dnsClients
 }
 
+// getAccountName will return DnsClient's AccountName
 func (d *DnsClient) getAccountName() string {
 	return d.AccountName
 }

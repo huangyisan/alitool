@@ -12,11 +12,11 @@ var accountMap map[string]map[string]string
 var accounts Accounts
 
 type Accounts struct {
-	AliAccount []aliAccount `mapstructure:"ali_account"`
+	AliAccount []AliAccount `mapstructure:"ali_account"`
 }
 
-type aliAccount struct {
-	Alias           string `mapstructure:"alias"`
+type AliAccount struct {
+	AccountName     string `mapstructure:"accountName"`
 	AccessKeyId     string `mapstructure:"accessKeyId"`
 	AccessKeySecret string `mapstructure:"secretKeyId"`
 }
@@ -25,17 +25,13 @@ func GetAccountMap() map[string]map[string]string {
 	return accountMap
 }
 
-func (a *aliAccount) GetAccessKeyId() string {
+func (a *AliAccount) GetAccessKeyId() string {
 	return a.AccessKeyId
 }
 
-func (a *aliAccount) GetAccessKeySecret() string {
+func (a *AliAccount) GetAccessKeySecret() string {
 	return a.AccessKeySecret
 }
-
-//func GetAllAliAccounts() Accounts {
-//	return accounts
-//}
 
 func accountUnmarshal() {
 	viper.Unmarshal(&accounts)
@@ -44,11 +40,11 @@ func accountUnmarshal() {
 func accountToMap() {
 	accountMap = make(map[string]map[string]string)
 	for _, v := range accounts.AliAccount {
-		if accountMap[v.Alias] == nil {
-			accountMap[v.Alias] = make(map[string]string)
+		if accountMap[v.AccountName] == nil {
+			accountMap[v.AccountName] = make(map[string]string)
 		}
-		accountMap[v.Alias]["accessKeyId"] = v.AccessKeyId
-		accountMap[v.Alias]["accessKeySecret"] = v.AccessKeySecret
+		accountMap[v.AccountName]["accessKeyId"] = v.AccessKeyId
+		accountMap[v.AccountName]["accessKeySecret"] = v.AccessKeySecret
 	}
 }
 

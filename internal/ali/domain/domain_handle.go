@@ -2,7 +2,7 @@ package domain
 
 import (
 	"alitool/internal/pkg/common"
-	"fmt"
+	. "alitool/internal/pkg/mylog"
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	dm "github.com/aliyun/alibaba-cloud-sdk-go/services/domain"
 )
@@ -16,7 +16,7 @@ func (d *DomainClient) getRegisteredDomainResponse(domainName string) *dm.QueryD
 	request.DomainName = domainName
 	response, err := d.I.QueryDomainByDomainName(request)
 	if err != nil {
-		fmt.Println(err.Error())
+		LoggerNoT.Println(err.Error())
 	}
 	return response
 }
@@ -34,7 +34,8 @@ func (d *DomainClient) getAllRegisteredDomainsResponse() (response []*dm.QueryDo
 		request.PageNum = requests.NewInteger(pageStartNumber)
 		res, err := d.I.QueryDomainList(request)
 		if err != nil {
-			fmt.Println(err.Error())
+			LoggerNoT.Println(err.Error())
+			return nil
 		}
 		// literal results
 		response = append(response, res)
@@ -60,7 +61,7 @@ func (d *DomainClient) getAllRegisteredDomains() (hasRecordDomains recordRegiste
 }
 
 // getExpireDomains will print all the domain expire day in ali account
-func (d *DomainClient) getExpireDomains(expireDay int) (expireDomains map[string]int) {
+func (d *DomainClient) getExpireDomains(expireDay int) (expireDomains expireDomainsInfo) {
 	expireDomains = make(map[string]int)
 	for _, dms := range d.getAllRegisteredDomainsResponse() {
 		for _, _dm := range dms.Data.Domain {
@@ -69,10 +70,10 @@ func (d *DomainClient) getExpireDomains(expireDay int) (expireDomains map[string
 			}
 		}
 	}
-	if len(expireDomains) > 1 {
+	if len(expireDomains) > 0 {
 		return expireDomains
 	}
-	return nil
+	return expireDomains
 }
 
 // getDomainExpireCurrDiff will print the specific domain will remain someday to expire
