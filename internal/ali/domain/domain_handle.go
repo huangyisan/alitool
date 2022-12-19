@@ -2,6 +2,7 @@ package domain
 
 import (
 	"alitool/internal/pkg/common"
+	. "alitool/internal/pkg/mylog"
 	"fmt"
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	dm "github.com/aliyun/alibaba-cloud-sdk-go/services/domain"
@@ -16,7 +17,7 @@ func (d *DomainClient) getRegisteredDomainResponse(domainName string) *dm.QueryD
 	request.DomainName = domainName
 	response, err := d.I.QueryDomainByDomainName(request)
 	if err != nil {
-		fmt.Println(err.Error())
+		LoggerNoT.Println(err.Error())
 	}
 	return response
 }
