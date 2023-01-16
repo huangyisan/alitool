@@ -7,3 +7,18 @@ ali_account:
       accountName: ali_account_02
       accessKeyId: abc
       secretKeyId: def
+
+acme:
+  account:
+    name: test@gmail.com
+  api_url:
+    prod: "https://acme-v02.api.letsencrypt.org/directory" # prod api
+    staging: "https://acme-staging-v02.api.letsencrypt.org/directory" # staging api
+
+  ssl_platform:
+    cloudflare:
+      authEmail: ""
+      authToken: ""
+    alicloud:
+      accessKey: ""
+      accessSecretKey: ""
