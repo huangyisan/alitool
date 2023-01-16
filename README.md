@@ -66,5 +66,5 @@
   * alitool create acme 
   * alitool create acme -t (acme测试接口)
 - [x] 证书签发 (读取yaml中acme用户)
-  * alitool create acme -d test.com -p cloudflare
+  * alitool create acme -d test.com -d abc.test.com -p cloudflare
 

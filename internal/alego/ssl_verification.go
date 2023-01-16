@@ -7,6 +7,9 @@ import (
 	"github.com/go-acme/lego/v4/lego"
 	"github.com/go-acme/lego/v4/providers/dns/cloudflare"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -16,7 +19,21 @@ const (
 	propagationTimeout = 1 * time.Minute
 )
 
-func cloudFlareVerification(client *lego.Client, authEmail, authToken string, domains ...string) {
+func writeCertificateToFile(certificates *certificate.Resource, acmeApi string) {
+	var err error
+	certificateStorePath := filepath.Join(os.Getenv("HOME"), baseFolderName, baseAccountsRootFolderName, acmeApi, viper.GetString("acme.account.name"))
+	err = os.WriteFile(fmt.Sprintf("%s/%s.crt", certificateStorePath, certificates.Domain), certificates.Certificate, 0755)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	err = os.WriteFile(fmt.Sprintf("%s/%s.key", certificateStorePath, certificates.Domain), certificates.PrivateKey, 0755)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+}
+
+// cloudFlareVerification use cloudflare dns verification
+func cloudFlareVerification(client *lego.Client, authEmail, authToken string, acmeApi string, domains ...string) {
 	var cloudFlareConfig cloudflare.Config
 	cloudFlareConfig = cloudflare.Config{
 		AuthEmail:          authEmail,
@@ -45,5 +62,5 @@ func cloudFlareVerification(client *lego.Client, authEmail, authToken string, do
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	fmt.Printf("%#v\n", certificates)
+	writeCertificateToFile(certificates, acmeApi)
 }

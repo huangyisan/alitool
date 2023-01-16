@@ -20,6 +20,6 @@ func NewAcmeClient(email string, CADirURL string) *lego.Client {
 	}(email, CADirURL)
 }
 
-func CloudFlareVerification(client *lego.Client, authEmail, authToken string, domains ...string) {
-	cloudFlareVerification(client, authEmail, authToken, domains...)
+func CloudFlareVerification(client *lego.Client, authEmail, authToken string, acmeApi string, domains ...string) {
+	cloudFlareVerification(client, authEmail, authToken, acmeApi, domains...)
 }

@@ -6,37 +6,44 @@ package sslcert
 import (
 	"alitool/internal/alego"
 	"github.com/go-acme/lego/v4/lego"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"net/url"
 )
 
 var (
-	domainName string
-	platform   string
-	testFlag   bool
+	domainNames []string
+	platform    string
+	testFlag    bool
 )
 
 func sslCertAction() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
 		client := &lego.Client{}
 		acmeEmail := viper.GetString("acme.account.name")
+		acmeApi := ""
 		if testFlag {
-			stagingApi := viper.GetString("acme.api_url.staging")
-			client = alego.NewAcmeClient(acmeEmail, stagingApi)
+			acmeApi = viper.GetString("acme.api_url.staging")
+			client = alego.NewAcmeClient(acmeEmail, acmeApi)
 		} else {
-			prodApi := viper.GetString("acme.api_url.prod")
-			client = alego.NewAcmeClient(acmeEmail, prodApi)
+			acmeApi = viper.GetString("acme.api_url.prod")
+			client = alego.NewAcmeClient(acmeEmail, acmeApi)
+		}
+
+		urlPath, err := url.Parse(acmeApi)
+		if err != nil {
+			logrus.Fatal(err)
 		}
 
 		switch platform {
 		case "cloudflare":
 			authEmail := viper.GetString("acme.ssl_platform.cloudflare.authEmail")
 			authToken := viper.GetString("acme.ssl_platform.cloudflare.authToken")
-			alego.CloudFlareVerification(client, authEmail, authToken, domainName)
+			alego.CloudFlareVerification(client, authEmail, authToken, urlPath.Host, domainNames...)
 		default:
 			cmd.Help()
 		}
-
 	}
 }
 
@@ -54,7 +61,7 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
-	SslcertCmd.Flags().StringVarP(&domainName, "domain", "d", "", "specify ssl domain")
+	SslcertCmd.Flags().StringSliceVarP(&domainNames, "domain", "d", []string{}, "specify ssl domain")
 	SslcertCmd.Flags().StringVarP(&platform, "platform", "p", "cloudflare", "specify verification cloud platform")
 	SslcertCmd.Flags().BoolVarP(&testFlag, "test", "t", false, "specific test api")
 
