@@ -4,8 +4,11 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"alitool/alitool/cmd/create"
+	"alitool/alitool/cmd/create/acme"
 	"alitool/internal/ali/account"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"os"
 
 	"alitool/alitool/cmd/check"
@@ -46,6 +49,7 @@ func init() {
 	// add sub command
 	rootCmd.AddCommand(check.CheckCmd)
 	rootCmd.AddCommand(list.ListCmd)
+	rootCmd.AddCommand(create.CreateCmd)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -84,8 +88,11 @@ func initConfig() {
 
 	// init ali all accounts
 	account.InitAccount()
+	// Get acme key values from ~/.alitool.yaml
+	acme.InitValues()
 	// init dns clients
 	//dns.initAllDnsClients()
 	// init domain clients
 	//domain.initAllDomainClient()
+	logrus.SetReportCaller(true)
 }
