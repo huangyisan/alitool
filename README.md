@@ -44,6 +44,10 @@
     - [ ] 查询指定月份消费
     - [ ] 查询指定服务消费
 
+5. 全站加速
+    - [ ] 域名配置查询
+    - [ ] ssl证书替换
+
 ## 其他
 - [x] 列出当前配置的阿里云账号
    * go run main.go list account
@@ -51,3 +55,16 @@
    * go run main.go list region
 - [ ] 如果ram user没有权限,则跳过, 并返回错误.
 - [ ] 将提示等输出标准化
+- [ ] acme account.json信息回写(可不做)
+- [ ] acme 注册失败,删除accounts相关路径
+
+## ACME流程
+    //config.CADirURL = "https://acme-staging-v02.api.letsencrypt.org/directory"
+    //config.CADirURL = "https://acme-v02.api.letsencrypt.org/directory"
+**任何执行都需要先判断用户是否存在**
+- [x] acme用户创建 (user放入yaml配置中)
+  * alitool create acme 
+  * alitool create acme -t (acme测试接口)
+- [x] 证书签发 (读取yaml中acme用户)
+  * alitool create acme -d test.com -d abc.test.com -p cloudflare
+
