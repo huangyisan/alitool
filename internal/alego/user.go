@@ -3,8 +3,6 @@ package alego
 import (
 	"crypto"
 	"github.com/go-acme/lego/v4/registration"
-	"github.com/sirupsen/logrus"
-	"net/url"
 )
 
 // You'll need a user or account type that implements acme.User
@@ -27,12 +25,13 @@ func (u *AcmeUser) GetPrivateKey() crypto.PrivateKey {
 }
 
 func (u *AcmeUser) GetRegistrationUrl() string {
-	uri, err := url.Parse(u.Registration.URI)
-	if err != nil {
-		logrus.Fatal(err)
-	}
+	return getUrlHost(u.Registration.URI)
+	//uri, err := url.Parse(u.Registration.URI)
+	//if err != nil {
+	//	logrus.Fatal(err)
+	//}
 
-	return uri.Host
+	//return uri.Host
 }
 
 type IUser interface {

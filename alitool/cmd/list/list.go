@@ -7,6 +7,7 @@ import (
 	"alitool/alitool/cmd/list/account"
 	"alitool/alitool/cmd/list/dns"
 	"alitool/alitool/cmd/list/domain"
+	"alitool/alitool/cmd/list/sslcert"
 	"github.com/spf13/cobra"
 )
 
@@ -25,6 +26,7 @@ func init() {
 	ListCmd.AddCommand(account.AccountCmd)
 	ListCmd.AddCommand(account.RegionCmd)
 	ListCmd.AddCommand(dns.DnsCmd)
+	ListCmd.AddCommand(sslcert.SslcertCmd)
 
 	// Here you will define your flags and configuration settings.
 

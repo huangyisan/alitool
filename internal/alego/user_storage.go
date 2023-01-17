@@ -15,13 +15,13 @@ import (
 //
 // rootPath:
 //
-//	./.lego/accounts/
+//	./.alego/accounts/
 //	     │      └── root accounts directory
 //	     └── "path" option
 //
 // rootUserPath:
 //
-//	./.lego/accounts/localhost_14000/hubert@hubert.com/
+//	./.alego/accounts/localhost_14000/hubert@hubert.com/
 //	     │      │             │             └── userID ("email" option)
 //	     │      │             └── CA server ("server" option)
 //	     │      └── root accounts directory
@@ -29,7 +29,7 @@ import (
 //
 // keysPath:
 //
-//	./.lego/accounts/localhost_14000/hubert@hubert.com/keys/
+//	./.alego/accounts/localhost_14000/hubert@hubert.com/keys/
 //	     │      │             │             │           └── root keys directory
 //	     │      │             │             └── userID ("email" option)
 //	     │      │             └── CA server ("server" option)
@@ -38,7 +38,7 @@ import (
 //
 // accountFilePath:
 //
-//	./.lego/accounts/localhost_14000/hubert@hubert.com/account.json
+//	./.alego/accounts/localhost_14000/hubert@hubert.com/account.json
 //	     │      │             │             │             └── account file
 //	     │      │             │             └── userID ("email" option)
 //	     │      │             └── CA server ("server" option)
