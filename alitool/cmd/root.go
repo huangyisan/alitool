@@ -8,7 +8,6 @@ import (
 	"alitool/alitool/cmd/create/acme"
 	"alitool/internal/ali/account"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"os"
 
 	"alitool/alitool/cmd/check"
@@ -94,5 +93,5 @@ func initConfig() {
 	//dns.initAllDnsClients()
 	// init domain clients
 	//domain.initAllDomainClient()
-	logrus.SetReportCaller(true)
+	//logrus.SetReportCaller(true)
 }

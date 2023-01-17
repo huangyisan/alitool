@@ -8,6 +8,7 @@ import (
 	"github.com/go-acme/lego/v4/providers/dns/cloudflare"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"net/url"
 	"os"
 	"path/filepath"
 	"time"
@@ -21,19 +22,47 @@ const (
 
 func writeCertificateToFile(certificates *certificate.Resource, acmeApi string) {
 	var err error
-	certificateStorePath := filepath.Join(os.Getenv("HOME"), baseFolderName, baseAccountsRootFolderName, acmeApi, viper.GetString("acme.account.name"))
-	err = os.WriteFile(fmt.Sprintf("%s/%s.crt", certificateStorePath, certificates.Domain), certificates.Certificate, 0755)
+	certDomain := certificates.Domain
+	certificateStorePath := filepath.Join(os.Getenv("HOME"), baseFolderName, baseAccountsRootFolderName, acmeApi, viper.GetString("acme.account.name"), certDomain)
+	EnsureCertificatePath(certificateStorePath)
+	err = os.WriteFile(fmt.Sprintf("%s/%s.crt", certificateStorePath, certDomain), certificates.Certificate, 0755)
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	err = os.WriteFile(fmt.Sprintf("%s/%s.key", certificateStorePath, certificates.Domain), certificates.PrivateKey, 0755)
+
+	err = os.WriteFile(fmt.Sprintf("%s/%s.key", certificateStorePath, certDomain), certificates.PrivateKey, 0755)
 	if err != nil {
 		logrus.Fatal(err)
+	}
+	logrus.Infof("store %s in %s", certDomain, certificateStorePath)
+}
+
+func getAcmeHost(client *lego.Client) string {
+	regInfo, err := client.Registration.QueryRegistration()
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	acmeUrl := regInfo.URI
+
+	urlPath, err := url.Parse(acmeUrl)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	return urlPath.Host
+}
+
+func EnsureCertificatePath(certificateStorePath string) {
+	if _, err := os.Stat(certificateStorePath); os.IsNotExist(err) {
+		logrus.Infof("create certificate store path: %s\n", certificateStorePath)
+		err := os.Mkdir(certificateStorePath, os.ModePerm)
+		if err != nil {
+			logrus.Fatal(err)
+		}
 	}
 }
 
 // cloudFlareVerification use cloudflare dns verification
-func cloudFlareVerification(client *lego.Client, authEmail, authToken string, acmeApi string, domains ...string) {
+func cloudFlareVerification(client *lego.Client, authEmail, authToken string, domains ...string) {
 	var cloudFlareConfig cloudflare.Config
 	cloudFlareConfig = cloudflare.Config{
 		AuthEmail:          authEmail,
@@ -62,5 +91,8 @@ func cloudFlareVerification(client *lego.Client, authEmail, authToken string, ac
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	writeCertificateToFile(certificates, acmeApi)
+
+	acmeHost := getAcmeHost(client)
+
+	writeCertificateToFile(certificates, acmeHost)
 }

@@ -6,10 +6,8 @@ package sslcert
 import (
 	"alitool/internal/alego"
 	"github.com/go-acme/lego/v4/lego"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"net/url"
 )
 
 var (
@@ -31,23 +29,18 @@ func sslCertAction() func(cmd *cobra.Command, args []string) {
 			client = alego.NewAcmeClient(acmeEmail, acmeApi)
 		}
 
-		urlPath, err := url.Parse(acmeApi)
-		if err != nil {
-			logrus.Fatal(err)
-		}
-
 		switch platform {
 		case "cloudflare":
 			authEmail := viper.GetString("acme.ssl_platform.cloudflare.authEmail")
 			authToken := viper.GetString("acme.ssl_platform.cloudflare.authToken")
-			alego.CloudFlareVerification(client, authEmail, authToken, urlPath.Host, domainNames...)
+			alego.CloudFlareVerification(client, authEmail, authToken, domainNames...)
 		default:
 			cmd.Help()
 		}
 	}
 }
 
-// sslcertCmd represents the sslcert command
+// SslcertCmd represents the sslcert command
 var SslcertCmd = &cobra.Command{
 	Use:   "sslcert",
 	Short: "A brief description of your command",
