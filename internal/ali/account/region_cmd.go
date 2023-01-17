@@ -6,6 +6,6 @@ import (
 
 func ListRegion() {
 	for k, v := range getRegionList() {
-		LoggerNoT.Info(k, v)
+		LoggerNoT.Infof("%s %s\n", k, v)
 	}
 }
