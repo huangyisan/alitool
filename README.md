@@ -46,7 +46,9 @@
 
 5. 全站加速
     - [ ] 域名配置查询
+      - alitool list pcdn
     - [ ] ssl证书替换
+      - alitool patch pcdn -a acountName -d domainName -i ssl_file
 
 ## 其他
 - [x] 列出当前配置的阿里云账号
