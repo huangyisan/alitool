@@ -45,10 +45,13 @@
     - [ ] 查询指定服务消费
 
 5. 全站加速
-    - [ ] 域名配置查询
-      - alitool list pcdn
+    - [ ] 结果最好能实现排序
+    - [ ] 域名配置查询指定accountName
+      - alitool list dcdn -a accountName
+    - [ ] 域名配置查询account
+      - alitool list dcdn -A
     - [ ] ssl证书替换
-      - alitool patch pcdn -a acountName -d domainName -i ssl_file
+      - alitool patch dcdn -a acountName -d domainName -i ssl_file
 
 ## 其他
 - [x] 列出当前配置的阿里云账号
@@ -59,6 +62,7 @@
 - [ ] 将提示等输出标准化
 - [ ] acme account.json信息回写(可不做)
 - [x] acme 注册失败,删除accounts相关路径
+- [ ] 当list或者check所有账号的时候,账号如果没有权限,则报错,并且跳过.
 
 ## ACME流程
 **任何执行都需要先判断用户是否存在**
