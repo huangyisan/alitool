@@ -4,7 +4,6 @@ import (
 	"alitool/internal/ali/account"
 	"alitool/internal/pkg/common"
 	. "alitool/internal/pkg/mylog"
-	"github.com/sirupsen/logrus"
 )
 
 // listRegisteredDomainByAccount list registered domain by ali account
@@ -99,7 +98,6 @@ func FindExpireDomainsByAccount(i IDomainClient, expireDay int) {
 func FindExpireDomainsInAllAccounts(expireDay int) {
 	initAllDomainClient()
 	IDomainClients := getDomainClients()
-	logrus.Infof("%#v", IDomainClients)
 	for _, v := range IDomainClients {
 		FindExpireDomainsByAccount(v, expireDay)
 	}
