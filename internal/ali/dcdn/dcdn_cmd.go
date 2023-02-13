@@ -13,6 +13,7 @@ func ListAllHttpsDomainsInAllAccount() {
 	initAllDcdnClient()
 	allDcdnClient := getDcdnClients()
 	for _, v := range allDcdnClient {
+		LoggerNoT.Printf("\n\nAli account name: %s\n\n", v.getDcdnClientName())
 		ListAllHttpsDomainsByAccount(v)
 	}
 }

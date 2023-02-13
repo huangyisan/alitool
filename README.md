@@ -24,6 +24,7 @@
        
      - [ ] 域名ssl证书查询
        - 证书ssl查询
+
 2. dns服务
    - [x] 查询域名dns是否在该账号
      - alitool list dns -a AccountName -i baidu.com
@@ -45,10 +46,10 @@
     - [ ] 查询指定服务消费
 
 5. 全站加速
-    - [ ] 结果最好能实现排序
-    - [ ] 域名配置查询指定accountName
+    - [x] 输出实现排序
+    - [x] 域名配置查询指定accountName
       - alitool list dcdn -a accountName
-    - [ ] 域名配置查询account
+    - [x] 域名配置查询account
       - alitool list dcdn -A
     - [ ] ssl证书替换
       - alitool patch dcdn -a acountName -d domainName -i ssl_file

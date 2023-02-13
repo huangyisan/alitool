@@ -28,7 +28,8 @@ func (d *DcdnClient) getHttpsDomainListResponse() (response []*dcdn.DescribeDcdn
 		request.PageNumber = requests.NewInteger(pageStartNumber)
 		res, err := d.I.DescribeDcdnUserDomains(request)
 		if err != nil {
-			LoggerNoT.Println(err.Error())
+			LoggerNoT.Println("You are not authorized to operate this resource, or this API does not support RAM.")
+			//LoggerNoT.Println(err.Error())
 		}
 		totalCount = res.TotalCount
 		response = append(response, res)
@@ -64,4 +65,8 @@ func (d *DcdnClient) listAllHttpsDomains() (hasRecordHttpsDomains recordHttpsDom
 	sort.Strings(hasRecordHttpsDomainsKeys)
 
 	return hasRecordHttpsDomains, hasRecordHttpsDomainsKeys
+}
+
+func (d *DcdnClient) getDcdnClientName() string {
+	return d.AccountName
 }

@@ -22,6 +22,7 @@ type iDcdnClient interface {
 type IDcdnClient interface {
 	getHttpsDomainListResponse() (response []*dcdn.DescribeDcdnUserDomainsResponse)
 	listAllHttpsDomains() (hasRecordHttpsDomains recordHttpsDomains, hasRecordHttpsDomainsKeys []string)
+	getDcdnClientName() string
 }
 
 var dcdnClients = make([]IDcdnClient, 0)
