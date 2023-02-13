@@ -9,11 +9,11 @@ import (
 )
 
 var (
-	domainName     string
-	accountName    string
-	regionId       string
-	checkAllDomain bool
-	expireDay      int
+	domainName  string
+	accountName string
+	regionId    string
+	allDomains  bool
+	expireDay   int
 )
 
 func initDomainClient(accountName, regionId string) dm.IDomainClient {
@@ -22,7 +22,7 @@ func initDomainClient(accountName, regionId string) dm.IDomainClient {
 
 func domainAction() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
-		if checkAllDomain {
+		if allDomains {
 			dm.FindExpireDomainsInAllAccounts(expireDay)
 			return
 		}
@@ -60,7 +60,7 @@ func init() {
 	DomainCmd.Flags().StringVarP(&regionId, "regionId", "z", "cn-shanghai", "specific account region id")
 	DomainCmd.Flags().StringVarP(&domainName, "domain", "d", "", "specific domain to check")
 	DomainCmd.Flags().IntVarP(&expireDay, "end-expire-day", "e", 100, "specific end expire day")
-	DomainCmd.Flags().BoolVarP(&checkAllDomain, "all-domains", "A", false, "check all domains")
+	DomainCmd.Flags().BoolVarP(&allDomains, "all-domains", "A", false, "check all domains")
 
 	// only one command execute at one time
 	DomainCmd.MarkFlagsMutuallyExclusive("all-domains", "domain")

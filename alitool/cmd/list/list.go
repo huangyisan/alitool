@@ -5,6 +5,7 @@ package list
 
 import (
 	"alitool/alitool/cmd/list/account"
+	"alitool/alitool/cmd/list/dcdn"
 	"alitool/alitool/cmd/list/dns"
 	"alitool/alitool/cmd/list/domain"
 	"alitool/alitool/cmd/list/sslcert"
@@ -27,6 +28,7 @@ func init() {
 	ListCmd.AddCommand(account.RegionCmd)
 	ListCmd.AddCommand(dns.DnsCmd)
 	ListCmd.AddCommand(sslcert.SslcertCmd)
+	ListCmd.AddCommand(dcdn.DcdnCmd)
 
 	// Here you will define your flags and configuration settings.
 

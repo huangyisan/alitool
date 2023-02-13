@@ -16,6 +16,7 @@ type DomainClient struct {
 
 type expireDomainsInfo map[string]int
 
+// iDomainClient implement Domain origin function
 type iDomainClient interface {
 	QueryDomainByDomainName(request *dm.QueryDomainByDomainNameRequest) (response *dm.QueryDomainByDomainNameResponse, err error)
 	QueryDomainList(request *dm.QueryDomainListRequest) (response *dm.QueryDomainListResponse, err error)
