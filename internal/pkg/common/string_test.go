@@ -48,3 +48,22 @@ func TestDomainSuffix(t *testing.T) {
 		})
 	}
 }
+
+func TestGetLastMonth(t *testing.T) {
+	tests := []struct {
+		name string
+		want string
+	}{
+		{
+			name: "base case 01",
+			want: "2023-01",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := GetLastMonth(); got != tt.want {
+				t.Errorf("GetLastMonth() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
