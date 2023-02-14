@@ -21,6 +21,7 @@ type iFinanceClient interface {
 }
 
 type IFinanceClient interface {
+	getLastMonthPaymentAmount() float64
 }
 
 // newFinanceClient will return a finance client
