@@ -5,7 +5,7 @@ import (
 )
 
 // ali account map
-// alias:{ak:xxx, sk:xxx}
+// alias:{ak:xxx, sk:xxx, subAccount: xxx}
 var accountMap map[string]map[string]string
 
 // var accounts []AliAccount
@@ -19,6 +19,7 @@ type AliAccount struct {
 	AccountName     string `mapstructure:"accountName"`
 	AccessKeyId     string `mapstructure:"accessKeyId"`
 	AccessKeySecret string `mapstructure:"secretKeyId"`
+	SubAccount      string `mapstructure:"subAccount"`
 }
 
 func GetAccountMap() map[string]map[string]string {
@@ -45,6 +46,7 @@ func accountToMap() {
 		}
 		accountMap[v.AccountName]["accessKeyId"] = v.AccessKeyId
 		accountMap[v.AccountName]["accessKeySecret"] = v.AccessKeySecret
+		accountMap[v.AccountName]["subAccount"] = v.SubAccount
 	}
 }
 

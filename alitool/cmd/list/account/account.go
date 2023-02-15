@@ -8,9 +8,21 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func getAccountResource() func(cmd *cobra.Command, args []string) {
+var (
+	subAccount bool
+)
+
+func accountAction() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
-		account.ListAccount()
+		if subAccount {
+			account.ListSubAccount()
+			return
+		} else {
+			account.ListAccount()
+			return
+		}
+		cmd.Help()
+
 	}
 }
 
@@ -27,7 +39,7 @@ var AccountCmd = &cobra.Command{
 	DisableFlagsInUseLine: true,
 	Example: `  # List all domains
     alitool list account`,
-	Run: getAccountResource(),
+	Run: accountAction(),
 }
 
 var RegionCmd = &cobra.Command{
@@ -40,6 +52,8 @@ var RegionCmd = &cobra.Command{
 }
 
 func init() {
+
+	AccountCmd.Flags().BoolVarP(&subAccount, "subAccount", "s", false, "check all sub account")
 
 	// Here you will define your flags and configuration settings.
 
