@@ -15,12 +15,15 @@ func (f *FinanceClient) getQueryAccountBillResponse(month string) (response *bss
 
 	res, err := f.I.QueryAccountBill(request)
 	if err != nil {
-		LoggerNoT.Println("You are not authorized to operate this resource, or this API does not support RAM.")
+		LoggerNoT.Fatalln("You are not authorized to operate this resource, or this API does not support RAM.")
 	}
 	return res
 }
 
 func (f *FinanceClient) getLastMonthPaymentAmount() float64 {
 	res := f.getQueryAccountBillResponse(common.GetLastMonth())
-	return res.Data.Items.Item[0].PaymentAmount
+	if res.Data.Items.Item[0].PaymentAmount != 0 {
+		return res.Data.Items.Item[0].PaymentAmount
+	}
+	return res.Data.Items.Item[0].PretaxAmount
 }

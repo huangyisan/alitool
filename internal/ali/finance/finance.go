@@ -22,12 +22,13 @@ type iFinanceClient interface {
 
 type IFinanceClient interface {
 	getLastMonthPaymentAmount() float64
+	getAccountName() string
 }
 
 // newFinanceClient will return a finance client
 func newFinanceClient(accountName, regionId, accessKeyId, accessKeySecret string) IFinanceClient {
 	op := strategy.Operator{}
-	op.SetServiceClient(&strategy.DomainClient{})
+	op.SetServiceClient(&strategy.FinanceClient{})
 	c, err := op.NewClient(regionId, accessKeyId, accessKeySecret)
 	if err != nil {
 		return nil
@@ -62,4 +63,13 @@ func initAllDomainClient() {
 	for k, _ := range accounts {
 		financeClients = append(financeClients, InitFinanceClient(k, common.DefaultRegionId))
 	}
+}
+
+func getFinanceClients() []IFinanceClient {
+	return financeClients
+}
+
+// getAccountName will return DnsClient's AccountName
+func (f *FinanceClient) getAccountName() string {
+	return f.AccountName
 }
