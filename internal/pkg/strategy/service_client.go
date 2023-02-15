@@ -2,6 +2,7 @@ package strategy
 
 import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/bssopenapi"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/dcdn"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/domain"
 )
@@ -29,6 +30,13 @@ type DcdnClient struct {
 
 func (*DcdnClient) NewClient(regionId, accessKeyId, accessKeySecret string) (interface{}, error) {
 	return dcdn.NewClientWithAccessKey(regionId, accessKeyId, accessKeySecret)
+}
+
+type FinanceClient struct {
+}
+
+func (*FinanceClient) NewClient(regionId, accessKeyId, accessKeySecret string) (interface{}, error) {
+	return bssopenapi.NewClientWithAccessKey(regionId, accessKeyId, accessKeySecret)
 }
 
 type Operator struct {
