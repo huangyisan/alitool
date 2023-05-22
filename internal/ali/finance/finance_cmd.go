@@ -17,3 +17,16 @@ func ListLastMonthPaymentAmountInAllAccounts() {
 		ListLastMonthPaymentAmountByAccount(v)
 	}
 }
+
+func ListCashAmountByAccount(i IFinanceClient) {
+	cashAmount := i.getAvailableAmount()
+	LoggerNoT.Printf("%s available amount: %s\n", i.getAccountName(), cashAmount)
+}
+
+func ListCashAmountByAccountInAllAccounts() {
+	initAllDomainClient()
+	IFinanceClients := getFinanceClients()
+	for _, v := range IFinanceClients {
+		ListCashAmountByAccount(v)
+	}
+}

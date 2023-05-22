@@ -12,6 +12,7 @@ var (
 	accountName string
 	regionId    string
 	allFinances bool
+	cash        bool
 )
 
 func createFinanceClient(accountName, regionId string) fi.IFinanceClient {
@@ -20,6 +21,15 @@ func createFinanceClient(accountName, regionId string) fi.IFinanceClient {
 
 func financeAction() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
+		if cash && allFinances && accountName == "" {
+			fi.ListCashAmountByAccountInAllAccounts()
+			return
+		}
+		if cash && accountName != "" {
+			account := createFinanceClient(accountName, regionId)
+			fi.ListCashAmountByAccount(account)
+			return
+		}
 		if allFinances && accountName == "" {
 			fi.ListLastMonthPaymentAmountInAllAccounts()
 			return
@@ -29,6 +39,7 @@ func financeAction() func(cmd *cobra.Command, args []string) {
 			fi.ListLastMonthPaymentAmountByAccount(account)
 			return
 		}
+
 		cmd.Help()
 	}
 }
@@ -51,6 +62,7 @@ func init() {
 	FinanceCmd.Flags().StringVarP(&accountName, "account", "a", "", "specific account name")
 	FinanceCmd.Flags().StringVarP(&regionId, "region", "z", "cn-shanghai", "specific account region")
 	FinanceCmd.Flags().BoolVarP(&allFinances, "all-domains", "A", false, "check all account finance")
+	FinanceCmd.Flags().BoolVarP(&cash, "cash", "c", false, "get cash amount")
 
 	// Here you will define your flags and configuration settings.
 

@@ -16,6 +16,7 @@ type FinanceClient struct {
 
 type iFinanceClient interface {
 	QueryAccountBill(request *bssopenapi.QueryAccountBillRequest) (response *bssopenapi.QueryAccountBillResponse, err error)
+	QueryAccountBalance(request *bssopenapi.QueryAccountBalanceRequest) (response *bssopenapi.QueryAccountBalanceResponse, err error)
 	//QueryDomainByDomainName(request *dm.QueryDomainByDomainNameRequest) (response *dm.QueryDomainByDomainNameResponse, err error)
 	//QueryDomainList(request *dm.QueryDomainListRequest) (response *dm.QueryDomainListResponse, err error)
 }
@@ -23,6 +24,7 @@ type iFinanceClient interface {
 type IFinanceClient interface {
 	getLastMonthPaymentAmount() float64
 	getAccountName() string
+	getAvailableAmount() string
 }
 
 // newFinanceClient will return a finance client
@@ -69,7 +71,7 @@ func getFinanceClients() []IFinanceClient {
 	return financeClients
 }
 
-// getAccountName will return DnsClient's AccountName
+// getAccountName will return Finance's AccountName
 func (f *FinanceClient) getAccountName() string {
 	return f.AccountName
 }
