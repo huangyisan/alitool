@@ -5,6 +5,7 @@ package check
 
 import (
 	"alitool/alitool/cmd/check/domain"
+	"alitool/alitool/cmd/check/ssl"
 	"github.com/spf13/cobra"
 )
 
@@ -20,6 +21,7 @@ var CheckCmd = &cobra.Command{
 func init() {
 	//cmd.rootCmd.AddCommand(checkCmd)
 	CheckCmd.AddCommand(domain.DomainCmd)
+	CheckCmd.AddCommand(ssl.SSLCmd)
 
 	// Here you will define your flags and configuration settings.
 

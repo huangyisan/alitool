@@ -11,7 +11,7 @@ func ListLastMonthPaymentAmountByAccount(i IFinanceClient) {
 }
 
 func ListLastMonthPaymentAmountInAllAccounts() {
-	initAllDomainClient()
+	initAllFinanceClient()
 	IFinanceClients := getFinanceClients()
 	for _, v := range IFinanceClients {
 		ListLastMonthPaymentAmountByAccount(v)
@@ -24,7 +24,7 @@ func ListCashAmountByAccount(i IFinanceClient) {
 }
 
 func ListCashAmountByAccountInAllAccounts() {
-	initAllDomainClient()
+	initAllFinanceClient()
 	IFinanceClients := getFinanceClients()
 	for _, v := range IFinanceClients {
 		ListCashAmountByAccount(v)

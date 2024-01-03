@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/agiledragon/gomonkey/v2 v2.9.0
-	github.com/aliyun/alibaba-cloud-sdk-go v1.61.1755
+	github.com/aliyun/alibaba-cloud-sdk-go v1.62.648
 	github.com/dchest/validator v0.0.0-20191217151620-8e45250f2371
 	github.com/go-acme/lego/v4 v4.9.1
 	github.com/sirupsen/logrus v1.9.0
@@ -31,6 +31,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/opentracing/opentracing-go v1.2.1-0.20220228012449-10b1cf09e00b // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
 	github.com/pkg/errors v0.9.1 // indirect

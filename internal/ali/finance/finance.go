@@ -59,8 +59,8 @@ func InitFinanceClient(accountName, regionId string) IFinanceClient {
 
 var financeClients = make([]IFinanceClient, 0)
 
-// initAllDomainClient will init all DnsClient from .alitool.yaml
-func initAllDomainClient() {
+// initAllFinanceClient will init all DnsClient from .alitool.yaml
+func initAllFinanceClient() {
 	accounts := account.GetAccountMap()
 	for k, _ := range accounts {
 		financeClients = append(financeClients, InitFinanceClient(k, common.DefaultRegionId))
